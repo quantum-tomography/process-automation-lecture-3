@@ -136,6 +136,45 @@
       line-height:1.6;
     }
     .qMeta{ margin-top:10px; color:var(--muted); font-size:13px; }
+  
+    /* ---- Ordering activities (DMAIC, 5S) ---- */
+    .orderPool, .orderDrop{
+      display:flex; flex-wrap:wrap; gap:10px;
+      padding:10px;
+      border-radius:14px;
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.03);
+      min-height:54px;
+    }
+    .orderItem{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      cursor:grab;
+      user-select:none;
+      font-weight:700;
+      color:var(--text);
+    }
+  .orderItem.dragging{ opacity:.55; cursor:grabbing; }
+
+    /* Floating clone while dragging (mobile-friendly) */
+    .dragGhost{
+      position:fixed;
+      z-index:99999;
+      pointer-events:none;
+      box-shadow:0 14px 40px rgba(0,0,0,.45);
+      opacity:.95;
+      cursor:grabbing;
+    }
+    .orderItem:active{ cursor:grabbing; }
+    .orderDrop .orderItem{
+      border-color:rgba(77,163,255,.30);
+      background:rgba(77,163,255,.08);
+    }
+    .orderHintGood{ border-color:rgba(61,220,151,.45) !important; background:rgba(61,220,151,.10) !important; }
+    .orderHintBad{ border-color:rgba(255,92,122,.45) !important; background:rgba(255,92,122,.10) !important; }
+
   </style>
 </head>
 
@@ -525,18 +564,28 @@ const lessonData = {
 
           <hr>
 
+          
           <div class="panel" id="dmaicActivity">
             <div class="h2" style="margin-top:0">Activity: Put DMAIC in order</div>
             <p class="note" style="margin-top:0">
-              Drag the cards into the correct order. Then press <strong>Check</strong>.
+              Drag the cards into the correct order. Move them from <strong>Cards</strong> into <strong>Your order</strong>, then press <strong>Check</strong>.
             </p>
-            <div id="dmaicBoard" style="display:grid; gap:10px;"></div>
+
+            <div class="h2" style="margin:14px 0 8px">Cards</div>
+            <div id="dmaic-pool" class="orderPool"></div>
+
+            <div class="h2" style="margin:14px 0 8px">Your order</div>
+            <div id="dmaic-drop" class="orderDrop"></div>
+
             <div class="btns" style="margin-top:12px">
-              <button class="primary" id="dmaicCheck">Check order</button>
-              <button id="dmaicReset">Shuffle</button>
+              <button class="primary" id="dmaicCheck">Check</button>
+              <button id="dmaicReset">Reset</button>
             </div>
-            <div class="qFeedback hidden" id="dmaicFeedback"></div>
-            <div class="qMeta">Tip: “Control” is last because it ensures the improvement stays.</div>
+            <div id="dmaic-feedback" class="note" style="margin-top:12px"></div>
+            <div class="qMeta">Tip: “Control” is last because it ensures the improvements stay in place.</div>
+          </div>
+
+          <div class="qMeta">Tip: “Control” is last because it ensures the improvement stays.</div>
           </div>
         </div>
       `
@@ -946,80 +995,273 @@ function shuffleArray(arr){
   return a;
 }
 
-function buildDraggableList(container, items){
-  container.innerHTML = "";
-  items.forEach((label, idx) => {
-    const card = document.createElement("div");
-    card.className = "qOpt";
-    card.setAttribute("draggable","true");
-    card.dataset.label = label;
-    card.style.cursor = "grab";
-    card.innerHTML = `<strong style="display:block; margin-bottom:4px">${idx+1}.</strong>${label}`;
-    container.appendChild(card);
-  });
 
-  let dragEl = null;
 
-  container.querySelectorAll("[draggable='true']").forEach(el => {
-    el.addEventListener("dragstart", (e) => {
-      dragEl = el;
-      e.dataTransfer.effectAllowed = "move";
-      el.style.opacity = "0.6";
-    });
-    el.addEventListener("dragend", () => {
-      if(dragEl) dragEl.style.opacity = "1";
-      dragEl = null;
-    });
-    el.addEventListener("dragover", (e) => {
+function buildDraggableList(a, b, feedbackEl, onSave){
+  // Pointer-based drag & drop that works on mobile Safari/Chrome.
+  // Two modes:
+  //   (1) buildDraggableList(container, itemsArray) -> single-zone reorder
+  //   (2) buildDraggableList(poolEl, dropEl, feedbackEl, onSave) -> two zones with move + reorder
+
+  // ---------- Helpers ----------
+  function makeItem(label){
+    const el = document.createElement("div");
+    el.className = "orderItem";
+    el.dataset.label = label;
+    el.textContent = label;
+    return el;
+  }
+
+  function enablePointerDnD(zones){
+    zones.forEach(z => { z.style.touchAction = "none"; });
+
+    // Avoid double-binding if slide re-renders
+    const boundKey = "dndBound";
+    if(zones.every(z => z.dataset[boundKey] === "1")) return;
+    zones.forEach(z => z.dataset[boundKey] = "1");
+
+    let original = null;
+    let ghost = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function allItems(zone){ return [...zone.querySelectorAll(".orderItem")]; }
+
+    function makeGhost(fromEl){
+      const r = fromEl.getBoundingClientRect();
+      ghost = fromEl.cloneNode(true);
+      ghost.classList.add("dragGhost");
+      ghost.style.left = r.left + "px";
+      ghost.style.top  = r.top  + "px";
+      ghost.style.width = r.width + "px";
+      document.body.appendChild(ghost);
+    }
+
+    function zoneFromPoint(x, y){
+      const els = document.elementsFromPoint(x, y);
+      for(const el of els){
+        const z = el.closest(".orderPool, .orderDrop, .orderBoard");
+        if(z && zones.includes(z)) return z;
+      }
+      return null;
+    }
+
+    function insertAtBestSpot(zone, y){
+      const items = allItems(zone).filter(it => it !== original);
+      if(items.length === 0){
+        zone.appendChild(original);
+        return;
+      }
+
+      let bestEl = null;
+      let bestMid = 0;
+      let bestDist = Infinity;
+
+      for(const it of items){
+        const r = it.getBoundingClientRect();
+        const mid = r.top + r.height / 2;
+        const d = Math.abs(mid - y);
+        if(d < bestDist){
+          bestDist = d;
+          bestEl = it;
+          bestMid = mid;
+        }
+      }
+
+      if(!bestEl){
+        zone.appendChild(original);
+        return;
+      }
+
+      const insertAfter = y > bestMid;
+      if(insertAfter){
+        if(bestEl.nextSibling !== original){
+          zone.insertBefore(original, bestEl.nextSibling);
+        }
+      } else {
+        if(bestEl !== original.nextSibling){
+          zone.insertBefore(original, bestEl);
+        }
+      }
+    }
+
+    function moveGhost(x, y){
+      if(!ghost) return;
+      ghost.style.left = (x - offsetX) + "px";
+      ghost.style.top  = (y - offsetY) + "px";
+
+      const z = zoneFromPoint(x, y);
+      if(z) insertAtBestSpot(z, y);
+    }
+
+    function cleanup(){
+      if(!original) return;
+      original.style.visibility = "";
+      original.classList.remove("dragging");
+      if(ghost){ ghost.remove(); ghost = null; }
+      original = null;
+
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+
+      onSave && onSave(); // persist after each drag
+    }
+
+    function onPointerDown(e){
+      const target = e.target.closest(".orderItem");
+      if(!target) return;
       e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-    });
-    el.addEventListener("drop", (e) => {
+
+      original = target;
+
+      const r = original.getBoundingClientRect();
+      offsetX = e.clientX - r.left;
+      offsetY = e.clientY - r.top;
+
+      makeGhost(original);
+
+      original.classList.add("dragging");
+      original.style.visibility = "hidden";
+
+      moveGhost(e.clientX, e.clientY);
+
+      window.addEventListener("pointermove", onPointerMove, { passive:false });
+      window.addEventListener("pointerup", onPointerUp, { passive:false });
+      window.addEventListener("pointercancel", onPointerUp, { passive:false });
+    }
+
+    function onPointerMove(e){
+      if(!original || !ghost) return;
       e.preventDefault();
-      if(!dragEl || dragEl === el) return;
-      const nodes = Array.from(container.children);
-      const from = nodes.indexOf(dragEl);
-      const to = nodes.indexOf(el);
-      if(from < 0 || to < 0) return;
-      if(from < to) container.insertBefore(dragEl, el.nextSibling);
-      else container.insertBefore(dragEl, el);
-    });
-  });
+      moveGhost(e.clientX, e.clientY);
+    }
+
+    function onPointerUp(e){
+      if(!original) return;
+      e.preventDefault();
+      cleanup();
+    }
+
+    zones.forEach(z => z.addEventListener("pointerdown", onPointerDown));
+  }
+
+  // ---------- Mode 1: single-zone reorder ----------
+  if(Array.isArray(b)){
+    const container = a;
+    const items = b;
+
+    container.innerHTML = "";
+    items.forEach(t => container.appendChild(makeItem(t)));
+
+    enablePointerDnD([container]);
+    return;
+  }
+
+  // ---------- Mode 2: pool + drop ----------
+  const pool = a;
+  const drop = b;
+
+  enablePointerDnD([pool, drop]);
 }
+
 
 function getCurrentOrder(container){
   return Array.from(container.children).map(el => el.dataset.label);
 }
 
 function initDMAIC(){
-  const board = document.getElementById("dmaicBoard");
-  const fb = document.getElementById("dmaicFeedback");
+  const pool = document.getElementById("dmaic-pool");
+  const drop = document.getElementById("dmaic-drop");
+  const fb   = document.getElementById("dmaic-feedback");
   const btnCheck = document.getElementById("dmaicCheck");
   const btnReset = document.getElementById("dmaicReset");
-  if(!board || !fb || !btnCheck || !btnReset) return;
+  if(!pool || !drop || !fb || !btnCheck || !btnReset) return;
 
   const correct = ["Define","Measure","Analyze","Improve","Control"];
-  const start = (state.activity.dmaicOrder && Array.isArray(state.activity.dmaicOrder)) ? state.activity.dmaicOrder : shuffleArray(correct);
-  buildDraggableList(board, start);
+
+  function makeItem(label){
+    const el = document.createElement("div");
+    el.className = "orderItem";
+    el.dataset.label = label;
+    el.textContent = label;
+    return el;
+  }
+
+  function enableDrop(zone){
+    zone.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; });
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const label = e.dataTransfer.getData("text/plain");
+      if(!label) return;
+      const el = document.querySelector(`.orderItem[data-label="${label.replace(/"/g,'\\"')}"]`);
+      if(el) zone.appendChild(el);
+      // clear feedback + hints on move
+      fb.textContent = "";
+      drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
+      saveDMAIC();
+    });
+  }
+
+  function saveDMAIC(){
+    state.activity = state.activity || {};
+    state.activity.dmaic = {
+      pool: Array.from(pool.querySelectorAll(".orderItem")).map(x => x.dataset.label),
+      drop: Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label),
+    };
+    saveState();
+  }
+
+  function loadDMAIC(){
+    const saved = state.activity && state.activity.dmaic;
+    pool.innerHTML = ""; drop.innerHTML = "";
+    const labels = (saved && Array.isArray(saved.pool) && Array.isArray(saved.drop))
+      ? {pool: saved.pool, drop: saved.drop}
+      : {pool: shuffleArray(correct), drop: []};
+
+    labels.pool.forEach(l => pool.appendChild(makeItem(l)));
+    labels.drop.forEach(l => drop.appendChild(makeItem(l)));
+    fb.textContent = "";
+  }
+
+  enableDrop(pool);
+  enableDrop(drop);
+
+  // Mobile-friendly pointer DnD (move + reorder)
+  buildDraggableList(pool, drop, fb, saveDMAIC);
+
 
   btnReset.onclick = () => {
-    const shuffled = shuffleArray(correct);
-    state.activity.dmaicOrder = shuffled;
+    state.activity = state.activity || {};
+    state.activity.dmaic = { pool: shuffleArray(correct), drop: [] };
     saveState();
-    buildDraggableList(board, shuffled);
-    fb.classList.add("hidden");
-    fb.textContent = "";
+    loadDMAIC();
   };
 
   btnCheck.onclick = () => {
-    const order = getCurrentOrder(board);
-    state.activity.dmaicOrder = order;
-    saveState();
-    const ok = order.join("|") === correct.join("|");
-    fb.classList.remove("hidden");
-    fb.textContent = ok ? "✅ Correct order. DMAIC keeps improvement disciplined and sustainable."
-                        : "❌ Not yet. Hint: Define is first; Control is last.";
+    const order = Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label);
+    // clear hints
+    drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
+
+    if(order.length !== correct.length){
+      fb.textContent = `Not finished yet: you placed ${order.length} of ${correct.length} cards.`;
+      return;
+    }
+
+    let ok = true;
+    order.forEach((v,i) => {
+      const el = drop.querySelectorAll(".orderItem")[i];
+      if(v === correct[i]) el.classList.add("orderHintGood");
+      else { el.classList.add("orderHintBad"); ok = false; }
+    });
+
+    fb.textContent = ok
+      ? "✅ Correct order. DMAIC keeps improvement disciplined and sustainable."
+      : "❌ Not yet. Hint: Define is first; Control is last.";
+    saveDMAIC();
   };
+
+  loadDMAIC();
 }
 
 function init5S(){
