@@ -223,48 +223,43 @@
 
 <script>
 /** ---------------------------------------------------------
- *  Lecture 2 (book-like + reveal sections + retry quizzes)
- *  IMPORTANT: Existing slides are unchanged; new slides are appended AFTER the existing quizzes.
+ *  Process Automation – Interactive Lecture 3
+ *  Topic: Process Methodologies (Lean, Six Sigma, Lean Six Sigma)
+ *  This version REMOVES all slides BEFORE Lecture 3 and keeps reveal buttons working.
  *  --------------------------------------------------------- */
+
 const lessonData = {
-  courseTitle: "Process Automation – Interactive Lecture 2",
-  courseSub: "RPA Foundations",
+  courseTitle: "Process Automation – Interactive Lecture 3",
+  courseSub: "Process Methodologies (Lean • Six Sigma • Lean Six Sigma)",
   learningOutcomes: [
-    "Explain what RPA is and what it can do",
-    "Recognize why RPA gained strong market interest (investment, growth)",
-    "Differentiate RPA (task automation) from BPA (end-to-end orchestration) at a high level",
-    "Summarize why this matters for digital transformation",
-    "Explain the purpose of Lean and its core principles (value, value stream, flow, pull, perfection)",
-    "Explain Six Sigma using DPMO/sigma levels and why data-based quality improvement matters",
-    "Apply the DMAIC framework in the correct order and explain the goal of each phase",
-    "Describe Lean Six Sigma with 5S and the 7 wastes, and connect process methods to better RPA results"
+    "Explain the purpose of Lean and name its core principles (Value, Value Stream, Flow, Pull, Perfection/Kaizen).",
+    "Explain Six Sigma at a high level (defects, DPMO) and outline DMAIC.",
+    "Differentiate Lean vs Six Sigma and describe why Lean Six Sigma combines both.",
+    "Apply process-method thinking to RPA: maps, bottlenecks, FMEA thinking, and continuous improvement."
   ],
   slides: [
-    /* ===================================================================
-     *  LECTURE 3 CONTINUATION: PROCESS METHODOLOGIES (Lean, Six Sigma, Lean Six Sigma)
-     * =================================================================== */
-
     {
       type:"content",
       title:"Lecture 3 – Process Methodologies",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            RPA is powerful—but it becomes truly valuable when the underlying process is understood and improved.
-            In this lecture we connect automation to the bigger idea of <strong>continuous improvement</strong>:
-            designing work so it becomes easier, faster, safer, and more reliable—again and again.
+            RPA is a powerful tool—but it is not a substitute for good processes.
+            If we automate a weak workflow, we simply make the weak behavior happen faster.
+            This lecture introduces three practical process methodologies that help you improve work <em>before</em> (and after) automation:
+            <strong>Lean</strong>, <strong>Six Sigma</strong>, and <strong>Lean Six Sigma</strong>.
           </p>
 
-          <div class="kpiGrid">
-            <div class="kpi"><strong>Lean</strong><span>Remove waste; improve flow</span></div>
-            <div class="kpi"><strong>Six Sigma</strong><span>Reduce defects with data</span></div>
-            <div class="kpi"><strong>Lean Six Sigma</strong><span>Combine both approaches</span></div>
+          <div class="panel">
+            <ul>
+              <li><strong>Lean</strong>: reduce waste and improve flow (customer value first).</li>
+              <li><strong>Six Sigma</strong>: reduce defects using data and disciplined improvement.</li>
+              <li><strong>Lean Six Sigma</strong>: combine speed/flow with defect reduction.</li>
+            </ul>
           </div>
 
-          <hr>
-
-          <p class="small">
-            Lecture mindset: automation should not only make work faster. It should make work <em>better</em>.
+          <p>
+            We begin with a real example: how an organization built a culture of continuous improvement—and why that mattered for RPA.
           </p>
         </div>
       `
@@ -272,55 +267,82 @@ const lessonData = {
 
     {
       type:"content",
-      title:"Case Study: Voya and the Continuous Improvement Center",
+      title:"Case: Voya and continuous improvement",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            In 2013 Voya, a financial services firm, completed an IPO that raised <strong>$1.27 billion</strong>.
-            The deal was also a chance to transform the company: culture, transparency, and streamlined operations.
+            After its May 2013 IPO, Voya (a financial services firm) treated the moment as a chance to reshape its culture
+            and streamline operations. The company had grown through acquisitions, so it contained multiple sub-cultures—
+            which made large, consistent change hard.
           </p>
 
-          <p>
-            Voya had grown through many acquisitions—a “patchwork” of subcultures.
-            That makes large initiatives difficult, because different teams work differently and measure success differently.
-          </p>
-
-          <button class="toggleBtn" id="toggleVoyaCenter" type="button">
-            <span>Reveal: What they created (and why it mattered)</span>
-            <span id="iconVoyaCenter">▸</span>
+          <button class="toggleBtn" id="toggleVoya" type="button">
+            <span>Reveal: What Voya built</span>
+            <span id="iconVoya">▸</span>
           </button>
-          <div id="panelVoyaCenter" class="panel hidden">
+          <div id="panelVoya" class="panel hidden">
             <ul>
-              <li><strong>Continuous Improvement Center:</strong> a central hub to standardize improvement work.</li>
-              <li><strong>CEO-led initiative:</strong> strong signal that this is strategic, not a side project.</li>
-              <li><strong>Ongoing strategy:</strong> there is no “final state” in continuous improvement.</li>
+              <li>Voya created a <strong>Continuous Improvement Center</strong>.</li>
+              <li>The initiative had high visibility: <strong>the CEO led it</strong>.</li>
+              <li>Focus areas: <strong>transparency</strong>, <strong>quality results</strong>, <strong>efficiency</strong>.</li>
+              <li>Progress was tracked through metrics like engagement, customer scores, and turnover.</li>
+              <li>Ultimate aim: <strong>serve the customer better</strong>.</li>
             </ul>
-            <p class="small">
-              Key idea: a process culture needs <strong>visibility</strong> (transparency), <strong>quality outcomes</strong>, and <strong>efficiency</strong>.
-            </p>
           </div>
 
-          <button class="toggleBtn" id="toggleVoyaResults" type="button">
+          <button class="toggleBtn" id="toggleVoyaOutcomes" type="button">
             <span>Reveal: Outcomes (examples)</span>
-            <span id="iconVoyaResults">▸</span>
+            <span id="iconVoyaOutcomes">▸</span>
           </button>
-          <div id="panelVoyaResults" class="panel hidden">
+          <div id="panelVoyaOutcomes" class="panel hidden">
             <ul>
-              <li><strong>Retirement Recordkeeping Operations:</strong> ~20% reduction in <strong>NIGO</strong> applications (not-in-good-order).</li>
-              <li><strong>Hardship calls:</strong> ~41% fewer escalations to the call center.</li>
-              <li><strong>Internal QC:</strong> ~54% fewer failing internal quality checks.</li>
-              <li><strong>Innovation:</strong> myOrangeMoney—an interactive retirement-savings website (reported ~80% satisfaction in a survey).</li>
+              <li>Retirement Recordkeeping Operations reduced <strong>NIGO</strong> applications by <strong>20%</strong>.</li>
+              <li><strong>41%</strong> fewer hardship-call escalations to the call center.</li>
+              <li><strong>54%</strong> fewer failures in internal quality control checks.</li>
+              <li>Innovation example: <strong>myOrangeMoney</strong> (interactive retirement-savings site) with ~<strong>80%</strong> satisfaction in a survey.</li>
             </ul>
           </div>
 
           <hr>
 
-          <div class="quote">
-            “Technology will not be useful unless the people understand why it’s important and how it can get results.”
+          <p>
+            The key lesson is cultural: technology becomes useful only when people understand <em>why</em> improvement matters and how to measure it.
+            This is exactly why Lean and Six Sigma matter for RPA initiatives.
+          </p>
+        </div>
+      `
+    },
+
+    {
+      type:"content",
+      title:"Lean: where it came from (and why it worked)",
+      html: `
+        <div class="book">
+          <p class="lead dropcap">
+            In 1913, Henry Ford changed manufacturing with the moving assembly line.
+            It enabled fast mass production—but it also produced rigid, monolithic systems.
+            In the decades that followed, Toyota rethought the approach: in a smaller market with diverse needs,
+            mass production alone was not enough.
+          </p>
+
+          <button class="toggleBtn" id="toggleToyota" type="button">
+            <span>Reveal: Toyota Production System (TPS) idea</span>
+            <span id="iconToyota">▸</span>
+          </button>
+          <div id="panelToyota" class="panel hidden">
+            <p class="note" style="margin-top:0">
+              Toyota pursued a “seemingly magic” combination:
+            </p>
+            <ul>
+              <li><strong>Low cost</strong></li>
+              <li><strong>High quality</strong></li>
+              <li><strong>Mass customization</strong></li>
+            </ul>
+            <p class="small">A constant driver was continuous improvement (Kaizen).</p>
           </div>
 
-          <p class="small">
-            The message for RPA: if people do not understand <em>why</em> the process is changing, bots will not rescue the initiative.
+          <p>
+            Lean later became a widely used label (popularized in the 1980s). In practice, it is a customer-first way to remove waste and improve flow.
           </p>
         </div>
       `
@@ -328,63 +350,32 @@ const lessonData = {
 
     {
       type:"content",
-      title:"Lean: the story behind the idea",
+      title:"Lean: the 5 core principles (the usable version)",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            Lean thinking grew out of manufacturing. Henry Ford’s moving assembly line (1913) showed how standardization
-            can radically reduce production time.
-          </p>
-
-          <p>
-            But mass production has a weakness: it can become rigid—treating people like parts of a machine.
-            After the 1970s–1980s competition wave, companies had to rethink production.
-          </p>
-
-          <p>
-            Toyota became the most famous example. After studying Ford’s approach, Toyota realized Japan needed
-            smaller batches and more variety. The result was a production philosophy that aimed for
-            <strong>low cost</strong>, <strong>high quality</strong>, and <strong>mass customization</strong>.
-          </p>
-
-          <hr>
-
-          <p class="small">
-            Lean is not “a trick.” It is a long-term change in how the organization thinks about work.
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"Lean: 5 core principles",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Lean can look “fuzzy” because organizations adapt it. But the foundation is surprisingly simple:
-            identify what creates value, then remove what does not.
+            Lean can sound fuzzy because organizations implement it differently.
+            But the core logic is consistent: define value from the customer’s perspective, map the work, remove waste, and pursue continuous improvement.
           </p>
 
           <button class="toggleBtn" id="toggleLeanPrinciples" type="button">
-            <span>Reveal: The five principles</span>
+            <span>Reveal: Lean principles</span>
             <span id="iconLeanPrinciples">▸</span>
           </button>
           <div id="panelLeanPrinciples" class="panel hidden">
             <ul>
-              <li><strong>Value:</strong> what the customer will actually pay for.</li>
-              <li><strong>Value Stream:</strong> map the flow end-to-end; remove waste (but keep necessary compliance/safety steps).</li>
-              <li><strong>Flow:</strong> make creation and delivery smooth—optimize small steps across departments.</li>
-              <li><strong>Pull:</strong> produce when needed (just-in-time) to avoid inventory waste.</li>
-              <li><strong>Perfection:</strong> continuous improvement (<em>kaizen</em>) as a daily habit.</li>
+              <li><strong>Value:</strong> what the customer will pay for (requires feedback and market awareness).</li>
+              <li><strong>Value Stream:</strong> map development → production → distribution and remove waste (some waste may be necessary for safety/regulation).</li>
+              <li><strong>Flow:</strong> ensure efficient creation and delivery; optimize steps across the organization, not only one department.</li>
+              <li><strong>Pull:</strong> produce when needed (just-in-time), reducing inventory waste.</li>
+              <li><strong>Perfection (Kaizen):</strong> constant improvement; empower employees to improve their work.</li>
             </ul>
           </div>
 
           <hr>
 
           <p>
-            A practical lean starter move is to pick <strong>one</strong> painful problem, improve it, learn,
-            then scale to larger initiatives.
+            Lean is a mindset shift. Start with one real problem, learn, then scale to more ambitious improvements.
           </p>
         </div>
       `
@@ -392,207 +383,144 @@ const lessonData = {
 
     {
       type:"content",
-      title:"Lean in the real world: Danaher and DBS",
+      title:"Lean in practice: Danaher and the “DBS” habit",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            Many companies create their own “house version” of lean. Danaher is a classic example.
-            After early operational trouble, Toyota production experts pushed a deep redesign of workflows.
+            Danaher is a famous example of a company turning Lean into a repeatable operating system.
+            After early acquisition pressure, Toyota experts helped highlight the factory realities: a mess that required process rethinking.
+            Danaher turned the learning into the Danaher Business System (DBS).
           </p>
 
-          <p>
-            The learnings became the <strong>Danaher Business System (DBS)</strong>—a repeatable way to run improvement cycles.
-            The daily question was simple: <em>How can this be made better?</em>
-          </p>
-
-          <button class="toggleBtn" id="toggleDBS" type="button">
-            <span>Reveal: DBS in one sentence</span>
-            <span id="iconDBS">▸</span>
+          <button class="toggleBtn" id="toggleDanaher" type="button">
+            <span>Reveal: What made DBS “stick”</span>
+            <span id="iconDanaher">▸</span>
           </button>
-          <div id="panelDBS" class="panel hidden">
-            <p class="note" style="margin-top:0">
-              DBS describes a never-ending cycle: exceptional people build outstanding plans and execute with world-class tools
-              to create sustainable processes and superior performance—guided by customer priorities (Quality, Delivery, Cost, Innovation).
-            </p>
+          <div id="panelDanaher" class="panel hidden">
             <ul>
-              <li><strong>Kaizen sessions:</strong> structured improvement workshops.</li>
-              <li><strong>Policy deployment reviews:</strong> deep goal progress reviews across divisions.</li>
-              <li><strong>Leadership involvement:</strong> executives actively teach and reinforce the method.</li>
+              <li>Regular <strong>Kaizen sessions</strong> and policy deployment reviews.</li>
+              <li>Daily mindset: <strong>“How can things be made better?”</strong></li>
+              <li>Leadership involvement: executives taught Lean internally.</li>
+              <li>Long-term compounding: the methodology became part of how decisions were made.</li>
+            </ul>
+            <p class="small">Key idea: methods work when they become a habit—not a one-time project.</p>
+          </div>
+
+          <hr>
+
+          <p>
+            Lean is not “cost cutting.” It is building a system that continuously improves quality, delivery speed, and cost efficiency—without sacrificing innovation.
+          </p>
+        </div>
+      `
+    },
+
+    {
+      type:"content",
+      title:"Six Sigma: why the name matters (defects, DPMO)",
+      html: `
+        <div class="book">
+          <p class="lead dropcap">
+            Six Sigma formalized disciplined quality improvement using data.
+            The core goal is to reduce defects by understanding causes and improving processes in a repeatable, sustainable way.
+            “Six Sigma” refers to a statistical idea: being within six standard deviations from the mean.
+          </p>
+
+          <button class="toggleBtn" id="toggleSixSigmaBasics" type="button">
+            <span>Reveal: What “Six Sigma” implies</span>
+            <span id="iconSixSigmaBasics">▸</span>
+          </button>
+          <div id="panelSixSigmaBasics" class="panel hidden">
+            <ul>
+              <li>At “six sigma” performance, defects are extremely rare: about <strong>3.4 defects per million opportunities</strong> (DPMO).</li>
+              <li>Many real processes operate at ~3–4 sigma; improvement often brings large gains.</li>
+              <li>Six Sigma emphasizes: measurement, analysis, disciplined improvement, and control.</li>
             </ul>
           </div>
 
           <hr>
 
-          <p class="small">
-            Lesson: “lean” works best when it is embedded into management rhythms, not treated as a temporary project.
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"Six Sigma: quality improvement with statistics",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Six Sigma is a disciplined approach to reducing defects by measuring variation, finding root causes,
-            and improving processes in a repeatable, data-based way.
-          </p>
-
           <p>
-            The “sigma” idea comes from statistics: a standard deviation measures how spread out data is.
-            In a normal (bell) curve, most outcomes cluster around the mean.
+            Next, we visualize sigma levels and why improvement is not linear.
           </p>
-
-          <button class="toggleBtn" id="toggleSixSigmaMeaning" type="button">
-            <span>Reveal: What “Six Sigma” means in practice</span>
-            <span id="iconSixSigmaMeaning">▸</span>
-          </button>
-          <div id="panelSixSigmaMeaning" class="panel hidden">
-            <p class="note" style="margin-top:0">
-              If process outcomes stay within “six standard deviations,” defects are extremely rare:
-              about <strong>3.4 defects per million opportunities (DPMO)</strong>.
-            </p>
-            <p class="small">
-              Real organizations often operate around 3–4 sigma. Six Sigma tools aim to push quality upward.
-            </p>
-          </div>
         </div>
       `
     },
 
     {
       type:"content",
-      title:"Sigma levels: a visual + table",
+      title:"Sigma levels: visualization + reference table",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            Sigma levels are not linear. Each improvement step can reduce defects dramatically.
-            Going from 3σ to 4σ is roughly a 10× improvement in defects per million opportunities.
+            Sigma levels describe how far defects sit from the “normal” center of process performance.
+            As sigma increases, defects drop dramatically—improvement becomes exponential.
           </p>
 
-          <div class="panel" style="margin-top:10px">
-            <svg viewBox="0 0 900 280" width="100%" height="auto" aria-label="Sigma level visualization">
-              <!-- axis -->
-              <line x1="60" y1="230" x2="860" y2="230" stroke="rgba(255,255,255,.25)" stroke-width="2"/>
-              <line x1="60" y1="50" x2="60" y2="230" stroke="rgba(255,255,255,.25)" stroke-width="2"/>
+          <div class="panel" style="margin-top:14px">
+            <svg viewBox="0 0 920 260" width="100%" role="img" aria-label="Bell curve with sigma markers">
+              <line x1="50" y1="220" x2="880" y2="220" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+              <line x1="50" y1="220" x2="50" y2="40" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
 
-              <!-- bell curve (simple path) -->
-              <path d="M60 230
-                       C140 228, 160 210, 200 180
-                       C260 120, 320 70, 450 70
-                       C580 70, 640 120, 700 180
-                       C740 210, 760 228, 860 230"
-                    fill="none" stroke="rgba(77,163,255,.75)" stroke-width="4"/>
+              <path d="M60 220
+                       C160 220, 190 70, 320 70
+                       C410 70, 430 40, 465 40
+                       C500 40, 520 70, 610 70
+                       C740 70, 770 220, 870 220"
+                    fill="rgba(77,163,255,.10)" stroke="rgba(77,163,255,.75)" stroke-width="3"/>
 
-              <!-- sigma markers -->
-              <g fill="rgba(255,255,255,.7)" font-size="14" text-anchor="middle">
-                <line x1="160" y1="230" x2="160" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="160" y="268">-3σ</text>
+              <line x1="465" y1="220" x2="465" y2="40" stroke="rgba(61,220,151,.65)" stroke-width="3"/>
 
-                <line x1="260" y1="230" x2="260" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="260" y="268">-2σ</text>
-
-                <line x1="350" y1="230" x2="350" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="350" y="268">-1σ</text>
-
-                <line x1="450" y1="230" x2="450" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="450" y="268">Mean</text>
-
-                <line x1="550" y1="230" x2="550" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="550" y="268">+1σ</text>
-
-                <line x1="640" y1="230" x2="640" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="640" y="268">+2σ</text>
-
-                <line x1="740" y1="230" x2="740" y2="245" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-                <text x="740" y="268">+3σ</text>
+              <g stroke="rgba(255,255,255,.25)" stroke-width="2">
+                <line x1="365" y1="220" x2="365" y2="110"/>
+                <line x1="565" y1="220" x2="565" y2="110"/>
+                <line x1="265" y1="220" x2="265" y2="150"/>
+                <line x1="665" y1="220" x2="665" y2="150"/>
+                <line x1="165" y1="220" x2="165" y2="190"/>
+                <line x1="765" y1="220" x2="765" y2="190"/>
               </g>
 
-              <text x="450" y="32" text-anchor="middle" fill="#e7eefc" font-size="18" font-weight="800">
-                Normal distribution (conceptual) — “sigma” measures spread
-              </text>
+              <g fill="#e7eefc" font-size="14">
+                <text x="454" y="236">μ</text>
+                <text x="350" y="105">-1σ</text>
+                <text x="550" y="105">+1σ</text>
+                <text x="250" y="145">-2σ</text>
+                <text x="650" y="145">+2σ</text>
+                <text x="150" y="185">-3σ</text>
+                <text x="750" y="185">+3σ</text>
+              </g>
             </svg>
+
+            <div class="small" style="margin-top:10px">
+              Visual intuition: as you push defects further into the tails (higher sigma), the defect rate collapses.
+            </div>
           </div>
 
-          <hr>
-
-          <div class="panel" style="overflow:auto">
-            <table class="table" style="width:100%; border-collapse:collapse">
-              <thead>
-                <tr>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Sigma</th>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">DPMO</th>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">% Good</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">1</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">690,000</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">31.000%</td></tr>
-                <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">2</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">308,537</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">69.1463%</td></tr>
-                <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">3</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">66,807</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">93.3193%</td></tr>
-                <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">4</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">6,210</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">99.379%</td></tr>
-                <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">5</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">233</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">99.9767%</td></tr>
-                <tr><td style="padding:10px">6</td><td style="padding:10px">3.4</td><td style="padding:10px">99.99966%</td></tr>
-              </tbody>
-            </table>
+          <div class="panel" style="margin-top:14px">
+            <div class="h2" style="margin-top:0">Sigma reference (DPMO)</div>
+            <div style="overflow:auto">
+              <table style="width:100%; border-collapse:collapse; font-size:14px">
+                <thead>
+                  <tr>
+                    <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Sigma Level</th>
+                    <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">DPMO</th>
+                    <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Percent Good</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">1</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">690,000</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">31.000%</td></tr>
+                  <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">2</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">308,537</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">69.1463%</td></tr>
+                  <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">3</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">66,807</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">93.3193%</td></tr>
+                  <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">4</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">6,210</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">99.379%</td></tr>
+                  <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">5</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">233</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">99.9767%</td></tr>
+                  <tr><td style="padding:10px;">6</td><td style="padding:10px;">3.4</td><td style="padding:10px;">99.99966%</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          <p class="small" style="margin-top:10px">
-            DPMO = defects per million opportunities.
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"Lean vs Six Sigma (quick comparison)",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Lean and Six Sigma are often taught separately, but they complement each other.
-            One focuses on <strong>flow and waste</strong>; the other focuses on <strong>variation and defects</strong>.
-          </p>
-
-          <div class="panel" style="overflow:auto">
-            <table class="table" style="width:100%; border-collapse:collapse">
-              <thead>
-                <tr>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Dimension</th>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Lean</th>
-                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Six Sigma</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Primary goal</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Remove waste; improve flow</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Reduce defects; reduce variation</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Typical tools</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Value stream map, kaizen, pull/JIT</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">DPMO, SPC charts, hypothesis tests, regression</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Best for</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Speed, waste, handoffs, waiting time</td>
-                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Quality, error rates, defect root causes</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px">Key question</td>
-                  <td style="padding:10px">“What steps do not add value?”</td>
-                  <td style="padding:10px">“Where does variation create defects?”</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <hr>
 
           <p class="small">
-            For RPA, both matter: remove waste first, then automate a cleaner, more stable process.
+            Practical point: the “right sigma” depends on context. Some processes cannot afford defects; others prioritize flexibility.
           </p>
         </div>
       `
@@ -600,69 +528,53 @@ const lessonData = {
 
     {
       type:"content",
-      title:"DMAIC: the Six Sigma improvement cycle",
+      title:"DMAIC: the improvement engine (and an activity)",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            A common Six Sigma implementation framework is <strong>DMAIC</strong>:
+            A widely used Six Sigma implementation framework is <strong>DMAIC</strong>:
             Define, Measure, Analyze, Improve, Control.
+            It forces discipline: you do not “jump to solutions” before understanding the problem and the data.
           </p>
 
           <button class="toggleBtn" id="toggleDMAIC" type="button">
-            <span>Reveal: What each phase tries to accomplish</span>
+            <span>Reveal: DMAIC in one line each</span>
             <span id="iconDMAIC">▸</span>
           </button>
           <div id="panelDMAIC" class="panel hidden">
             <ul>
-              <li><strong>Define:</strong> name the project, set scope, clarify the problem, set milestones (project charter).</li>
-              <li><strong>Measure:</strong> map the process and collect reliable data (bad data → bad conclusions).</li>
-              <li><strong>Analyze:</strong> find root causes (brainstorming + fishbone + statistics like regression).</li>
-              <li><strong>Improve:</strong> implement solutions; reduce unintended consequences (FMEA is useful).</li>
-              <li><strong>Control:</strong> monitor and sustain gains (reviews + SPC charts for meaningful variation).</li>
+              <li><strong>Define:</strong> name the project, identify the problem, set goals, build a project charter.</li>
+              <li><strong>Measure:</strong> map the process and create a data collection plan.</li>
+              <li><strong>Analyze:</strong> find root causes (brainstorming + diagrams + statistics where useful).</li>
+              <li><strong>Improve:</strong> build solutions and error-proof them (FMEA thinking).</li>
+              <li><strong>Control:</strong> monitor and sustain; use control charts to decide when change is needed.</li>
             </ul>
           </div>
 
           <hr>
 
-          <p>
-            Next: an ordering activity to make the sequence automatic in your mind.
-          </p>
-        </div>
-      `
-    },
+          
+          <div class="panel" id="dmaicActivity">
+            <div class="h2" style="margin-top:0">Activity: Put DMAIC in order</div>
+            <p class="note" style="margin-top:0">
+              Drag the cards into the correct order. Move them from <strong>Cards</strong> into <strong>Your order</strong>, then press <strong>Check</strong>.
+            </p>
 
-    {
-      type:"content",
-      title:"Activity: Put DMAIC in order",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Drag the cards into the correct order. Then press <strong>Check</strong>.
-          </p>
+            <div class="h2" style="margin:14px 0 8px">Cards</div>
+            <div id="dmaic-pool" class="orderPool"></div>
 
-          <div class="panel">
-            <div class="small" style="margin-bottom:10px">
-              Tip: the logic is “name the problem → measure → find causes → fix → sustain.”
+            <div class="h2" style="margin:14px 0 8px">Your order</div>
+            <div id="dmaic-drop" class="orderDrop"></div>
+
+            <div class="btns" style="margin-top:12px">
+              <button class="primary" id="dmaicCheck">Check</button>
+              <button id="dmaicReset">Reset</button>
             </div>
+            <div id="dmaic-feedback" class="note" style="margin-top:12px"></div>
+            <div class="qMeta">Tip: “Control” is last because it ensures the improvements stay in place.</div>
+          </div>
 
-            <div style="display:grid; gap:12px; grid-template-columns:1fr; align-items:start">
-              <div>
-                <div class="h2" style="margin:0 0 8px">Cards</div>
-                <div id="dmaic-pool" class="orderPool" data-order-id="dmaic"></div>
-              </div>
-
-              <div>
-                <div class="h2" style="margin:0 0 8px">Your order</div>
-                <div id="dmaic-drop" class="orderDrop" data-order-id="dmaic"></div>
-
-                <div class="btns" style="margin-top:12px">
-                  <button class="primary" type="button" onclick="checkOrder('dmaic')">Check</button>
-                  <button type="button" onclick="resetOrder('dmaic')">Reset</button>
-                </div>
-
-                <div id="dmaic-feedback" class="note" style="margin-top:12px"></div>
-              </div>
-            </div>
+          <div class="qMeta">Tip: “Control” is last because it ensures the improvement stays.</div>
           </div>
         </div>
       `
@@ -674,81 +586,40 @@ const lessonData = {
       html: `
         <div class="book">
           <p class="lead dropcap">
-            Six Sigma projects are easier when responsibilities are clear.
-            Think of it as a mix of leadership support and technical quality skill.
+            Six Sigma projects often define roles (to ensure buy-in and execution) and “belt levels” (to describe proficiency).
+            The belts are not a universal certification—but they are a useful language inside organizations.
           </p>
 
-          <button class="toggleBtn" id="toggleRolesBelts" type="button">
-            <span>Reveal: Roles + belts</span>
-            <span id="iconRolesBelts">▸</span>
+          <button class="toggleBtn" id="toggleRoles" type="button">
+            <span>Reveal: Key roles</span>
+            <span id="iconRoles">▸</span>
           </button>
-          <div id="panelRolesBelts" class="panel hidden">
+          <div id="panelRoles" class="panel hidden">
             <ul>
-              <li><strong>Executive:</strong> buy-in, objectives, approvals.</li>
-              <li><strong>Champion:</strong> operational management; removes roadblocks; coordinates across departments.</li>
-              <li><strong>Process Owner:</strong> manages the process and supports statistical work.</li>
+              <li><strong>Executive:</strong> sets objectives, approves key actions, signals commitment.</li>
+              <li><strong>Champion:</strong> operational manager; removes roadblocks; coordinates across departments.</li>
+              <li><strong>Process Owner:</strong> manages process knowledge; keeps the project on track; understands measurement/statistics.</li>
             </ul>
-            <hr>
-            <ul>
-              <li><strong>White belt:</strong> basic awareness.</li>
-              <li><strong>Yellow belt:</strong> basic methods (DMAIC, mapping, variation).</li>
-              <li><strong>Green belt:</strong> supports implementation; statistics + analysis training.</li>
-              <li><strong>Black belt:</strong> full-time specialist; advanced statistics.</li>
-              <li><strong>Master black belt:</strong> highest level; mentors and trains others.</li>
-            </ul>
-            <p class="small">
-              Certification varies by provider; success comes from understanding the principles, not collecting titles.
-            </p>
           </div>
-        </div>
-      `
-    },
 
-    {
-      type:"content",
-      title:"Lean Six Sigma: combining strengths",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Lean Six Sigma combines lean’s waste removal with Six Sigma’s defect reduction.
-            In practice: improve flow and stability, then use data methods to push quality even higher.
-          </p>
-
-          <p>
-            A common teaching path is: start with lean basics, then bring in Six Sigma tools when the organization has momentum.
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"5S: a simple Lean starter framework",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            A practical Lean starter method is <strong>5S</strong>.
-            It creates a clean, organized environment where work becomes easier and problems become visible.
-          </p>
-
-          <button class="toggleBtn" id="toggleFiveS" type="button">
-            <span>Reveal: 5S meanings</span>
-            <span id="iconFiveS">▸</span>
+          <button class="toggleBtn" id="toggleBelts" type="button">
+            <span>Reveal: Belt levels (simple)</span>
+            <span id="iconBelts">▸</span>
           </button>
-          <div id="panelFiveS" class="panel hidden">
+          <div id="panelBelts" class="panel hidden">
             <ul>
-              <li><strong>Sort (Seiri):</strong> remove what is unnecessary.</li>
-              <li><strong>Straighten (Seiton):</strong> organize so the right thing is available at the right time.</li>
-              <li><strong>Shine (Seiso):</strong> keep clean; remove causes of dirt/disorder.</li>
-              <li><strong>Standardize (Seiketsu):</strong> define steps, roles, and routines.</li>
-              <li><strong>Sustain (Shitsuke):</strong> maintain discipline so improvements last.</li>
+              <li><strong>White Belt:</strong> basic familiarity.</li>
+              <li><strong>Yellow Belt:</strong> basic DMAIC + mapping + variation awareness.</li>
+              <li><strong>Green Belt:</strong> supports projects; stronger stats and data analysis.</li>
+              <li><strong>Black Belt:</strong> full-time specialist; advanced statistics.</li>
+              <li><strong>Master Black Belt:</strong> mentors and trains others.</li>
             </ul>
           </div>
 
           <hr>
 
           <p>
-            Next: a quick ordering activity.
+            Practical lesson: you don’t need belts to improve a process—but you do need clarity, data discipline, and accountability.
           </p>
         </div>
       `
@@ -756,196 +627,162 @@ const lessonData = {
 
     {
       type:"content",
-      title:"Activity: Put the 5S steps in order",
+      title:"Lean vs Six Sigma (comparison table)",
       html: `
         <div class="book">
           <p class="lead dropcap">
-            Drag the 5S cards into the correct order. Then press <strong>Check</strong>.
+            Lean and Six Sigma are often mixed up because both improve processes.
+            A clean way to separate them is: <strong>Lean reduces waste and improves flow</strong>; <strong>Six Sigma reduces defects with data</strong>.
+          </p>
+
+          <div class="panel" style="margin-top:14px; overflow:auto">
+            <table style="width:100%; border-collapse:collapse; font-size:14px; min-width:760px">
+              <thead>
+                <tr>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Dimension</th>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Lean</th>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.12)">Six Sigma</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)"><strong>Main goal</strong></td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Reduce waste, improve flow</td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Reduce defects/variation using data</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)"><strong>Primary lens</strong></td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Customer value stream</td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Quality metrics (DPMO, CTQ)</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)"><strong>Typical tools</strong></td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Kaizen, 5S, waste removal, pull systems</td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">DMAIC, SPC charts, root cause + stats</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)"><strong>Best for</strong></td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">Speed, efficiency, smoother work</td>
+                  <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08)">High-quality output, low error rates</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;"><strong>Risk if misused</strong></td>
+                  <td style="padding:10px;">Over-focus on cost cutting without learning</td>
+                  <td style="padding:10px;">Over-measurement/bureaucracy on low-impact work</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="small">
+            In real organizations, Lean and Six Sigma often complement each other—this is why Lean Six Sigma exists.
+          </p>
+        </div>
+      `
+    },
+
+    {
+      type:"content",
+      title:"Lean Six Sigma: start with 5S (activity)",
+      html: `
+        <div class="book">
+          <p class="lead dropcap">
+            Lean Six Sigma combines Lean’s waste removal with Six Sigma’s defect reduction.
+            A common starting point is <strong>5S</strong>—a practical method for building order and consistency.
+          </p>
+
+          <div class="panel" id="s5Activity">
+            <div class="h2" style="margin-top:0">Activity: Put the 5S steps in order</div>
+            <p class="note" style="margin-top:0">
+              Drag the cards into the correct order. Then press <strong>Check</strong>.
+            </p>
+            <div id="s5Board" style="display:grid; gap:10px;"></div>
+            <div class="btns" style="margin-top:12px">
+              <button class="primary" id="s5Check">Check order</button>
+              <button id="s5Reset">Shuffle</button>
+            </div>
+            <div class="qFeedback hidden" id="s5Feedback"></div>
+            <div class="qMeta">Hint: Sort → Straighten → Shine → Standardize → Sustain.</div>
+          </div>
+
+          <button class="toggleBtn" id="toggleWastes" type="button">
+            <span>Reveal: The 7 wastes (Ohno)</span>
+            <span id="iconWastes">▸</span>
+          </button>
+          <div id="panelWastes" class="panel hidden">
+            <ul>
+              <li><strong>Motion</strong>, <strong>Transportation</strong>, <strong>Defects</strong>, <strong>Overproduction</strong>, <strong>Inventory</strong>, <strong>Waiting</strong>, <strong>Overprocessing</strong>.</li>
+            </ul>
+            <p class="small">Use these as a checklist when you map a workflow.</p>
+          </div>
+        </div>
+      `
+    },
+
+    {
+      type:"content",
+      title:"Finding the right balance: a cautionary lesson",
+      html: `
+        <div class="book">
+          <p class="lead dropcap">
+            Process methodologies can be taken to extremes.
+            If management focuses only on steep cost cuts, short-term results may appear—but the long-term ability to compete can collapse.
+          </p>
+
+          <button class="toggleBtn" id="toggleKraftHeinz" type="button">
+            <span>Reveal: Kraft Heinz (what went wrong)</span>
+            <span id="iconKraftHeinz">▸</span>
+          </button>
+          <div id="panelKraftHeinz" class="panel hidden">
+            <ul>
+              <li>Cost-cutting went too deep: reduced R&D, marketing, product development.</li>
+              <li>Market shifted: consumers wanted healthier/cheaper alternatives.</li>
+              <li>By Feb 2019: major brand write-down and dividend cut; stock fell sharply after the merger period.</li>
+            </ul>
+            <p class="small">
+              Lesson: “efficiency” that kills innovation is not improvement.
+            </p>
+          </div>
+
+          <hr>
+
+          <p>
+            The practical goal is balance: reduce waste and defects while protecting the ability to learn, innovate, and adapt.
+          </p>
+        </div>
+      `
+    },
+
+    {
+      type:"content",
+      title:"Applying Lean & Six Sigma to RPA (the usable checklist)",
+      html: `
+        <div class="book">
+          <p class="lead dropcap">
+            Lean and Six Sigma can demand serious time and resources.
+            In some organizations, applying them thoroughly can delay RPA for months—but the payoff can be stronger automation impact.
+            Even without formal programs, the principles help you design better bots.
           </p>
 
           <div class="panel">
-            <div id="s5-pool" class="orderPool" data-order-id="s5"></div>
-            <div style="height:10px"></div>
-            <div id="s5-drop" class="orderDrop" data-order-id="s5"></div>
-
-            <div class="btns" style="margin-top:12px">
-              <button class="primary" type="button" onclick="checkOrder('s5')">Check</button>
-              <button type="button" onclick="resetOrder('s5')">Reset</button>
-            </div>
-
-            <div id="s5-feedback" class="note" style="margin-top:12px"></div>
-          </div>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"The 7 wastes (Lean lens): where work leaks value",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Lean often teaches “waste categories” to train your eye.
-            These are patterns that silently add cost and delay without adding customer value.
-          </p>
-
-          <button class="toggleBtn" id="toggleSevenWastes" type="button">
-            <span>Reveal: The seven wastes</span>
-            <span id="iconSevenWastes">▸</span>
-          </button>
-          <div id="panelSevenWastes" class="panel hidden">
             <ul>
-              <li><strong>Motion:</strong> unnecessary movement by people or machines.</li>
-              <li><strong>Transportation:</strong> unnecessary movement of items/information.</li>
-              <li><strong>Defects:</strong> design, manufacturing, or component problems causing rework and risk.</li>
-              <li><strong>Overproduction:</strong> making more than needed (dangerous when tastes change fast).</li>
-              <li><strong>Inventory:</strong> excess supplies or work-in-progress that tie up money and attention.</li>
-              <li><strong>Waiting:</strong> delays between steps (customers expect speed).</li>
-              <li><strong>Overprocessing:</strong> steps that don’t add value (doing “too much” work).</li>
-            </ul>
-          </div>
-
-          <hr>
-
-          <p class="small">
-            RPA often targets “waiting,” “motion,” and “overprocessing” in office work—copy/paste, re-entry, chasing approvals.
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"Finding the right balance: the Kraft Heinz warning",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Process methods can be abused. If management treats them as only a way to cut costs, results can become worse.
-          </p>
-
-          <p>
-            Kraft Heinz (formed by a major merger in 2015) focused heavily on cost cutting.
-            For a while, it looked successful—but cuts went too deep in areas like R&amp;D, marketing, and product development.
-          </p>
-
-          <button class="toggleBtn" id="toggleBalance" type="button">
-            <span>Reveal: Why it became a problem</span>
-            <span id="iconBalance">▸</span>
-          </button>
-          <div id="panelBalance" class="panel hidden">
-            <ul>
-              <li>Innovation slowed while the market shifted toward healthier and lower-cost alternatives.</li>
-              <li>Short-term efficiency harmed long-term competitiveness.</li>
-              <li>Message: improvement must protect the company’s ability to evolve.</li>
-            </ul>
-          </div>
-
-          <hr>
-
-          <p class="small">
-            Process excellence is not “cut everything.” It is “build a system that competes better.”
-          </p>
-        </div>
-      `
-    },
-
-    {
-      type:"content",
-      title:"Applying Lean + Six Sigma to RPA (practical takeaways)",
-      html: `
-        <div class="book">
-          <p class="lead dropcap">
-            Lean and Six Sigma can demand time and resources. Sometimes they delay RPA implementation.
-            But the payoff can be large: you automate a cleaner process, so bots break less and deliver stronger value.
-          </p>
-
-          <button class="toggleBtn" id="toggleApplyRpa" type="button">
-            <span>Reveal: A checklist mindset for system analysis + RPA</span>
-            <span id="iconApplyRpa">▸</span>
-          </button>
-          <div id="panelApplyRpa" class="panel hidden">
-            <ul>
-              <li><strong>Map the process:</strong> use flowcharts / Visio / Blueworks to see handoffs and delays.</li>
-              <li><strong>Bottlenecks + root causes:</strong> what is truly causing delays or errors?</li>
-              <li><strong>FMEA thinking:</strong> brainstorm unintended consequences before changing the process.</li>
-              <li><strong>Walk the work:</strong> observe how tasks happen in reality (not only in software).</li>
-              <li><strong>Automation implications:</strong> controls may change when bots execute consistently.</li>
-              <li><strong>Authority & approvals:</strong> exceptions and decision rules can streamline approvals—sometimes with AI support.</li>
+              <li><strong>Map the process</strong> (flowchart / BPMN / simple diagrams).</li>
+              <li><strong>Find bottlenecks</strong> and root causes before automating.</li>
+              <li><strong>Think like FMEA</strong>: anticipate failure points and unintended consequences.</li>
+              <li><strong>Walk the work</strong>: observe motion and physical constraints, not only software steps.</li>
+              <li><strong>Automation changes controls</strong>: bots can remove some manual review steps—but only if testing/audit are strong.</li>
+              <li><strong>Approval logic</strong>: exceptions and rules can streamline approvals; AI may expand decision capability later.</li>
             </ul>
           </div>
 
           <hr>
 
           <p>
-            The goal is continuous improvement: process maps are only the beginning of ongoing optimization.
+            Final mindset: process mapping is only the start. Continuous improvement should continue after bots go live.
+            Always ask: <strong>What is best for the customer?</strong> How does this change improve value?
           </p>
         </div>
       `
-    },
-
-    /* ---------------------- QUICK CHECKS (ONE PER NEW LEARNING GOAL) ---------------------- */
-    {
-      type:"quiz",
-      title:"Quick Check L3-1 (Goal 5: Lean principles)",
-      goalIndex: 4,
-      qid: "qc_l3_lean_principles",
-      question: "Which Lean principle most directly emphasizes producing only what is needed, when it is needed?",
-      options: [
-        "Value stream",
-        "Flow",
-        "Pull",
-        "Perfection"
-      ],
-      correctIndex: 2,
-      explanation: "Pull is the just-in-time idea: produce based on demand to reduce inventory waste."
-    },
-
-    {
-      type:"quiz",
-      title:"Quick Check L3-2 (Goal 6: Six Sigma and DPMO)",
-      goalIndex: 5,
-      qid: "qc_l3_six_sigma_dpmo",
-      question: "In Six Sigma language, what does DPMO stand for?",
-      options: [
-        "Design Process Management Output",
-        "Defects Per Million Opportunities",
-        "Data Points Measured Often",
-        "Delivery Performance Measured Once"
-      ],
-      correctIndex: 1,
-      explanation: "DPMO is defects per million opportunities—a common way to compare quality across processes with different complexity."
-    },
-
-    {
-      type:"quiz",
-      title:"Quick Check L3-3 (Goal 7: DMAIC order)",
-      goalIndex: 6,
-      qid: "qc_l3_dmaic_order",
-      question: "Which sequence correctly lists the DMAIC steps?",
-      options: [
-        "Define → Measure → Analyze → Improve → Control",
-        "Measure → Define → Improve → Analyze → Control",
-        "Define → Analyze → Measure → Improve → Control",
-        "Control → Improve → Analyze → Measure → Define"
-      ],
-      correctIndex: 0,
-      explanation: "DMAIC is Define, Measure, Analyze, Improve, Control."
-    },
-
-    {
-      type:"quiz",
-      title:"Quick Check L3-4 (Goal 8: Lean Six Sigma + 5S + wastes)",
-      goalIndex: 7,
-      qid: "qc_l3_lss_5s_waste",
-      question: "Which statement best describes why Lean Six Sigma supports better RPA outcomes?",
-      options: [
-        "It replaces the need to map processes, because bots automatically discover improvements",
-        "It removes waste and reduces defects first, so automation is applied to a cleaner and more stable process",
-        "It guarantees bots never fail when the UI changes",
-        "It only applies to manufacturing, not office processes"
-      ],
-      correctIndex: 1,
-      explanation: "Lean Six Sigma helps redesign and stabilize the process so RPA delivers stronger value and breaks less often."
     },
 
     {
@@ -954,88 +791,100 @@ const lessonData = {
       html: `
         <div class="book">
           <p class="lead dropcap">
-            If you remember only a few ideas from this lecture, remember these:
+            If you remember only a handful of points from this lecture, make them these:
           </p>
-
-          <hr>
 
           <ul>
             <li><strong>Lean</strong> improves flow by removing waste and focusing on customer value.</li>
-            <li><strong>Six Sigma</strong> reduces defects by measuring variation, analyzing causes, and improving with data.</li>
-            <li><strong>DMAIC</strong> is a practical improvement cycle: Define → Measure → Analyze → Improve → Control.</li>
-            <li><strong>Lean Six Sigma</strong> combines both: remove waste, stabilize the process, then push quality higher.</li>
-            <li><strong>For RPA:</strong> better processes produce better bots. Continuous improvement is the long-term advantage.</li>
+            <li><strong>Six Sigma</strong> improves quality by reducing defects using measurement and disciplined improvement (DMAIC).</li>
+            <li><strong>Lean Six Sigma</strong> merges speed/flow with defect reduction.</li>
+            <li>Over-optimization can be dangerous if it kills innovation (balance matters).</li>
+            <li>For <strong>RPA</strong>, process maps + bottleneck thinking + FMEA-style caution improve outcomes.</li>
           </ul>
         </div>
       `
-    }
+    },
 
+    {
+      type:"quiz",
+      title:"Quick Check 1 (Goal 1: Lean principles)",
+      goalIndex: 0,
+      qid: "l3_qc1_lean_principles",
+      question: "Which option best matches Lean’s core logic?",
+      options: [
+        "Maximize inventory to avoid shortages",
+        "Define customer value, map the value stream, reduce waste, improve flow, and pursue perfection (Kaizen)",
+        "Focus only on cost cutting, regardless of customer impact",
+        "Measure only defects and ignore speed or flow"
+      ],
+      correctIndex: 1,
+      explanation: "Lean starts from customer value and removes waste across the value stream, improving flow and continuously pursuing perfection (Kaizen)."
+    },
+    {
+      type:"quiz",
+      title:"Quick Check 2 (Goal 2: Six Sigma + DMAIC)",
+      goalIndex: 1,
+      qid: "l3_qc2_dmaic",
+      question: "What is the correct DMAIC order?",
+      options: [
+        "Define → Measure → Analyze → Improve → Control",
+        "Measure → Define → Improve → Analyze → Control",
+        "Define → Analyze → Measure → Control → Improve",
+        "Control → Improve → Analyze → Measure → Define"
+      ],
+      correctIndex: 0,
+      explanation: "DMAIC is Define, Measure, Analyze, Improve, Control. The structure prevents jumping to solutions without data and root-cause analysis."
+    },
+    {
+      type:"quiz",
+      title:"Quick Check 3 (Goal 3: Lean vs Six Sigma)",
+      goalIndex: 2,
+      qid: "l3_qc3_lean_vs_sixsigma",
+      question: "Which statement is most accurate?",
+      options: [
+        "Lean is mostly about waste/flow; Six Sigma is mostly about defects/variation; Lean Six Sigma combines them",
+        "Lean and Six Sigma are identical; only the names differ",
+        "Six Sigma is only for manufacturing; Lean is only for finance",
+        "Lean always requires advanced statistics; Six Sigma never uses data"
+      ],
+      correctIndex: 0,
+      explanation: "Lean focuses on eliminating waste and improving flow; Six Sigma focuses on reducing defects via data; Lean Six Sigma merges the strengths of both."
+    },
+    {
+      type:"quiz",
+      title:"Quick Check 4 (Goal 4: Applying to RPA)",
+      goalIndex: 3,
+      qid: "l3_qc4_rpa_apply",
+      question: "Which action is most consistent with applying these methods to RPA?",
+      options: [
+        "Automate first, then analyze later if something breaks",
+        "Skip process maps because bots can adapt automatically",
+        "Map the process, identify bottlenecks/root causes, anticipate failure points (FMEA thinking), then automate and continuously improve",
+        "Focus only on cutting staff costs as the primary metric of success"
+      ],
+      correctIndex: 2,
+      explanation: "Process mapping and root-cause thinking reduce the risk of automating waste. FMEA-style caution helps prevent unintended consequences, and continuous improvement sustains results."
+    }
   ]
 };
 
-/** ---------------------------------------------------------
- *  State (retry quizzes: keep ONLY last attempt per qid)
- *  --------------------------------------------------------- */
-const stateKey = "processAutomationLecture2_book_retryQuiz_v3";
+const stateKey = "processAutomationLecture3_processMethodologies_v1";
 let state = loadState() || {
   idx:0,
   startedAt:new Date().toISOString(),
   expanded: {
-
-
-    // slide 1
-    invest:false, uipath:false, why:false,
-    // slide 2
-    momentum:false, dines:false, drivers:false, next:false,
-    // slide 3..9
-    tasks:false, vendorView:false, notMacro:false, flavors:false,
-    benefits:false, downsides:false, compare:false,
-    compareRecap:false,
-    // NEW slides after quizzes
-    acronyms:false,
-    onPrem:false, onPremCosts:false,
-    cloudSaaSQuote:false, cloudDownsides:false,
-    cloudModels:false, rpaCloudImpact:false,
-    webStack:false,
-    lowCode:false,
-    ocrChallenges:false, ocrRpa:false,
-    dbRelational:false, dbModern:false,
-    apiBasics:false, apiTradeoffs:false,
-    aiBasics:false, aiLimits:false,
-    cognitiveAuto:false,
-    agileMethods:false,
-    devops:false,
-    flowchartSymbols:false    ,
-    // Lecture 3
-    voyaCenter:false, voyaResults:false,
+    voya:false, voyaOutcomes:false,
+    toyota:false,
     leanPrinciples:false,
-    dbs:false,
-    sixSigmaMeaning:false,
+    danaher:false,
+    sixSigmaBasics:false,
     dmaic:false,
-    rolesBelts:false,
-    fiveS:false,
-    sevenWastes:false,
-    balance:false,
-    applyRpa:false
-    ,
-    // Lecture 3
-    voyaCenter:false, voyaResults:false,
-    leanPrinciples:false,
-    dbs:false,
-    sixSigmaMeaning:false,
-    dmaic:false,
-    rolesBelts:false,
-    fiveS:false,
-    sevenWastes:false,
-    balance:false,
-    applyRpa:false
-
-  
-  
+    roles:false, belts:false,
+    wastes:false,
+    kraftHeinz:false
   },
-  quiz: {
-    // qid: { selectedIndex, isCorrect, answeredAt }
-  }
+  quiz: {},
+  activity: { dmaicOrder:null, s5Order:null }
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -1047,421 +896,345 @@ function resetState(){
     idx:0,
     startedAt:new Date().toISOString(),
     expanded: {
-      invest:false, uipath:false, why:false,
-      momentum:false, dines:false, drivers:false, next:false,
-      tasks:false, vendorView:false, notMacro:false, flavors:false,
-      benefits:false, downsides:false, compare:false,
-      compareRecap:false,
-      acronyms:false,
-      onPrem:false, onPremCosts:false,
-      cloudSaaSQuote:false, cloudDownsides:false,
-      cloudModels:false, rpaCloudImpact:false,
-      webStack:false,
-      lowCode:false,
-      ocrChallenges:false, ocrRpa:false,
-      dbRelational:false, dbModern:false,
-      apiBasics:false, apiTradeoffs:false,
-      aiBasics:false, aiLimits:false,
-      cognitiveAuto:false,
-      agileMethods:false,
-      devops:false,
-      flowchartSymbols:false
+      voya:false, voyaOutcomes:false,
+      toyota:false,
+      leanPrinciples:false,
+      danaher:false,
+      sixSigmaBasics:false,
+      dmaic:false,
+      roles:false, belts:false,
+      wastes:false,
+      kraftHeinz:false
     },
-    quiz:{}
+    quiz:{},
+    activity:{ dmaicOrder:null, s5Order:null }
   };
   render();
 }
 
-/** ---------------------------------------------------------
- *  Render
- *  --------------------------------------------------------- */
-function render(){
-  document.getElementById("courseTitle").textContent = lessonData.courseTitle;
-  document.getElementById("courseSub").textContent = lessonData.courseSub;
-
-  const goalsEl = document.getElementById("goals");
-  goalsEl.innerHTML = "";
-  for(const g of lessonData.learningOutcomes){
-    const li = document.createElement("li");
-    li.textContent = g;
-    goalsEl.appendChild(li);
-  }
-
-  const slides = lessonData.slides;
-  state.idx = Math.max(0, Math.min(state.idx, slides.length - 1));
-
-  document.getElementById("slideCounter").textContent = `${state.idx + 1} / ${slides.length}`;
-  document.getElementById("progressFill").style.width = `${((state.idx + 1) / slides.length) * 100}%`;
-
-  document.getElementById("btnPrev").disabled = (state.idx === 0);
-  document.getElementById("btnNext").disabled = (state.idx === slides.length - 1);
-
-  const slide = slides[state.idx];
-  const slideEl = document.getElementById("slide");
-  slideEl.innerHTML = "";
-
-  const h = document.createElement("h1");
-  h.className = "h1";
-  h.textContent = slide.title;
-  slideEl.appendChild(h);
-
-  if(slide.type === "quiz"){
-    slideEl.appendChild(renderQuiz(slide));
-  } else {
-    const content = document.createElement("div");
-    content.innerHTML = slide.html;
-    slideEl.appendChild(content);
-    bindRevealsForSlide(state.idx);
-  }
-
-  const openCount = Object.values(state.expanded).filter(Boolean).length;
-  const quizSlides = lessonData.slides.filter(s => s.type === "quiz").length;
-  const quizAnswered = Object.keys(state.quiz || {}).length;
-  document.getElementById("statusLine").textContent =
-    `Slide ${state.idx + 1}/${slides.length} • Revealed blocks: ${openCount} • Quick checks (latest tries): ${quizAnswered}/${quizSlides}`;
-
-  saveState();
-}
-
-function bindRevealsForSlide(idx){
-  // Existing bindings (unchanged indices up to slide 9)
-  if(idx === 0){
-    bindReveal("toggleInvest", "panelInvest", "iconInvest", "invest");
-    bindReveal("toggleUiPath", "panelUiPath", "iconUiPath", "uipath");
-    bindReveal("toggleWhy", "panelWhy", "iconWhy", "why");
-  } else if(idx === 1){
-    bindReveal("toggleMomentum", "panelMomentum", "iconMomentum", "momentum");
-    bindReveal("toggleDines", "panelDines", "iconDines", "dines");
-    bindReveal("toggleDrivers", "panelDrivers", "iconDrivers", "drivers");
-    bindReveal("toggleNext", "panelNext", "iconNext", "next");
-  } else if(idx === 2){
-    bindReveal("toggleTasks", "panelTasks", "iconTasks", "tasks");
-  } else if(idx === 3){
-    bindReveal("toggleVendorView", "panelVendorView", "iconVendorView", "vendorView");
-  } else if(idx === 4){
-    bindReveal("toggleNotMacro", "panelNotMacro", "iconNotMacro", "notMacro");
-  } else if(idx === 5){
-    bindReveal("toggleFlavors", "panelFlavors", "iconFlavors", "flavors");
-  } else if(idx === 6){
-    bindReveal("toggleBenefits", "panelBenefits", "iconBenefits", "benefits");
-    bindReveal("toggleDownsides", "panelDownsides", "iconDownsides", "downsides");
-  } else if(idx === 7){
-    bindReveal("toggleCompare", "panelCompare", "iconCompare", "compare");
-  } else if(idx === 8){
-    bindReveal("toggleCompareRecap", "panelCompareRecap", "iconCompareRecap", "compareRecap");
-  }
-
-  // New slides appended AFTER existing quizzes:
-  // Slides 0..8 are content, 9..12 are quizzes, so new content starts at idx 13.
-  else if(idx === 13){
-    bindReveal("toggleAcronyms", "panelAcronyms", "iconAcronyms", "acronyms");
-  } else if(idx === 14){
-    bindReveal("toggleOnPrem", "panelOnPrem", "iconOnPrem", "onPrem");
-    bindReveal("toggleOnPremCosts", "panelOnPremCosts", "iconOnPremCosts", "onPremCosts");
-  } else if(idx === 15){
-    bindReveal("toggleCloudSaaSQuote", "panelCloudSaaSQuote", "iconCloudSaaSQuote", "cloudSaaSQuote");
-    bindReveal("toggleCloudDownsides", "panelCloudDownsides", "iconCloudDownsides", "cloudDownsides");
-  } else if(idx === 16){
-    bindReveal("toggleCloudModels", "panelCloudModels", "iconCloudModels", "cloudModels");
-    bindReveal("toggleRpaCloudImpact", "panelRpaCloudImpact", "iconRpaCloudImpact", "rpaCloudImpact");
-  } else if(idx === 17){
-    bindReveal("toggleWebStack", "panelWebStack", "iconWebStack", "webStack");
-  } else if(idx === 18){
-    bindReveal("toggleLowCode", "panelLowCode", "iconLowCode", "lowCode");
-  } else if(idx === 19){
-    bindReveal("toggleOcrChallenges", "panelOcrChallenges", "iconOcrChallenges", "ocrChallenges");
-    bindReveal("toggleOcrRpa", "panelOcrRpa", "iconOcrRpa", "ocrRpa");
-  } else if(idx === 20){
-    bindReveal("toggleDbRelational", "panelDbRelational", "iconDbRelational", "dbRelational");
-    bindReveal("toggleDbModern", "panelDbModern", "iconDbModern", "dbModern");
-  } else if(idx === 21){
-    bindReveal("toggleApiBasics", "panelApiBasics", "iconApiBasics", "apiBasics");
-    bindReveal("toggleApiTradeoffs", "panelApiTradeoffs", "iconApiTradeoffs", "apiTradeoffs");
-  } else if(idx === 22){
-    bindReveal("toggleAiBasics", "panelAiBasics", "iconAiBasics", "aiBasics");
-    bindReveal("toggleAiLimits", "panelAiLimits", "iconAiLimits", "aiLimits");
-  } else if(idx === 23){
-    bindReveal("toggleCognitiveAuto", "panelCognitiveAuto", "iconCognitiveAuto", "cognitiveAuto");
-  } else if(idx === 24){
-    bindReveal("toggleAgileMethods", "panelAgileMethods", "iconAgileMethods", "agileMethods");
-  } else if(idx === 25){
-    bindReveal("toggleDevOps", "panelDevOps", "iconDevOps", "devops");
-  } else if(idx === 26){
-    bindReveal("toggleFlowchartSymbols", "panelFlowchartSymbols", "iconFlowchartSymbols", "flowchartSymbols");
-  }
-
-
-  // Lecture 3 (appended after Lecture 2 content):
-  else if(idx === 32){
-    bindReveal("toggleVoyaCenter","panelVoyaCenter","iconVoyaCenter","voyaCenter");
-    bindReveal("toggleVoyaResults","panelVoyaResults","iconVoyaResults","voyaResults");
-  } else if(idx === 34){
-    bindReveal("toggleLeanPrinciples","panelLeanPrinciples","iconLeanPrinciples","leanPrinciples");
-  } else if(idx === 35){
-    bindReveal("toggleDBS","panelDBS","iconDBS","dbs");
-  } else if(idx === 36){
-    bindReveal("toggleSixSigmaMeaning","panelSixSigmaMeaning","iconSixSigmaMeaning","sixSigmaMeaning");
-  } else if(idx === 39){
-    bindReveal("toggleDMAIC","panelDMAIC","iconDMAIC","dmaic");
-  } else if(idx === 40){
-    initOrder("dmaic");
-  } else if(idx === 41){
-    bindReveal("toggleRolesBelts","panelRolesBelts","iconRolesBelts","rolesBelts");
-  } else if(idx === 43){
-    bindReveal("toggleFiveS","panelFiveS","iconFiveS","fiveS");
-  } else if(idx === 44){
-    initOrder("s5");
-  } else if(idx === 45){
-    bindReveal("toggleSevenWastes","panelSevenWastes","iconSevenWastes","sevenWastes");
-  } else if(idx === 46){
-    bindReveal("toggleBalance","panelBalance","iconBalance","balance");
-  } else if(idx === 47){
-    bindReveal("toggleApplyRpa","panelApplyRpa","iconApplyRpa","applyRpa");
-  }
-
-
-}
-
-function bindReveal(btnId, panelId, iconId, key){
+function wireToggle(btnId, panelId, iconId, key){
   const btn = document.getElementById(btnId);
   const panel = document.getElementById(panelId);
   const icon = document.getElementById(iconId);
   if(!btn || !panel || !icon) return;
 
-  const isOpen = !!state.expanded[key];
-  panel.classList.toggle("hidden", !isOpen);
-  icon.textContent = isOpen ? "▾" : "▸";
+  const on = !!state.expanded[key];
+  panel.classList.toggle("hidden", !on);
+  icon.textContent = on ? "▾" : "▸";
 
-  btn.addEventListener("click", () => {
-    state.expanded[key] = !state.expanded[key];
+  btn.onclick = () => {
+    const now = !state.expanded[key];
+    state.expanded[key] = now;
+    panel.classList.toggle("hidden", !now);
+    icon.textContent = now ? "▾" : "▸";
     saveState();
-    render();
+  };
+}
+
+function renderQuiz(sl){
+  const prev = state.quiz[sl.qid];
+  const chosen = (prev && typeof prev.selectedIndex === "number") ? prev.selectedIndex : null;
+  const answered = !!prev;
+
+  const optsHtml = sl.options.map((txt, i) => {
+    let cls = "";
+    if(answered){
+      if(i === sl.correctIndex) cls = "correct";
+      else if(i === chosen) cls = "wrong";
+    }
+    return `<button class="qOpt ${cls}" data-i="${i}" type="button">${txt}</button>`;
+  }).join("");
+
+  const fb = answered
+    ? `<div class="qFeedback">${prev.isCorrect ? "✅ Correct. " : "❌ Not quite. "}${sl.explanation}</div>`
+    : `<div class="qFeedback hidden"></div>`;
+
+  return `
+    <div class="quizBox">
+      <div class="qTitle">${sl.title}</div>
+      <p class="qPrompt">${sl.question}</p>
+      <div class="qOptions">${optsHtml}</div>
+      ${fb}
+      <div class="qMeta">You can retry. Export stores your latest attempt.</div>
+    </div>
+  `;
+}
+
+function wireQuiz(sl){
+  const box = document.querySelector(".quizBox");
+  if(!box) return;
+  box.querySelectorAll(".qOpt").forEach(btn => {
+    btn.onclick = () => {
+      const i = Number(btn.getAttribute("data-i"));
+      const isCorrect = (i === sl.correctIndex);
+      state.quiz[sl.qid] = { selectedIndex:i, isCorrect, answeredAt:new Date().toISOString() };
+      saveState();
+      render();
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
   });
 }
 
-
-/** ---------------------------------------------------------
- *  Ordering activities (DMAIC / 5S)
- *  - Drag cards between pool and drop zone
- *  - Check compares the drop order to the correct sequence
- *  --------------------------------------------------------- */
-const orderBank = {
-  dmaic: {
-    items: ["Define","Measure","Analyze","Improve","Control"],
-    correct: ["Define","Measure","Analyze","Improve","Control"]
-  },
-  s5: {
-    items: ["Sort","Straighten","Shine","Standardize","Sustain"],
-    correct: ["Sort","Straighten","Shine","Standardize","Sustain"]
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
   }
-};
+  return a;
+}
 
-function initOrder(id){
-  const pool = document.querySelector(`[data-order-id="${id}"]#${id}-pool`) || document.getElementById(`${id}-pool`);
-  const drop = document.querySelector(`[data-order-id="${id}"]#${id}-drop`) || document.getElementById(`${id}-drop`);
-  if(!pool || !drop) return;
+function buildDraggableList(container, items){
+  container.innerHTML = "";
+  items.forEach((label, idx) => {
+    const card = document.createElement("div");
+    card.className = "qOpt";
+    card.setAttribute("draggable","true");
+    card.dataset.label = label;
+    card.style.cursor = "grab";
+    card.innerHTML = `<strong style="display:block; margin-bottom:4px">${idx+1}.</strong>${label}`;
+    container.appendChild(card);
+  });
 
-  // If already initialized with children, skip.
-  if(pool.dataset.inited === "1" || drop.dataset.inited === "1") return;
+  let dragEl = null;
 
-  pool.dataset.inited = "1";
-  drop.dataset.inited = "1";
+  container.querySelectorAll("[draggable='true']").forEach(el => {
+    el.addEventListener("dragstart", (e) => {
+      dragEl = el;
+      e.dataTransfer.effectAllowed = "move";
+      el.style.opacity = "0.6";
+    });
+    el.addEventListener("dragend", () => {
+      if(dragEl) dragEl.style.opacity = "1";
+      dragEl = null;
+    });
+    el.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+    el.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if(!dragEl || dragEl === el) return;
+      const nodes = Array.from(container.children);
+      const from = nodes.indexOf(dragEl);
+      const to = nodes.indexOf(el);
+      if(from < 0 || to < 0) return;
+      if(from < to) container.insertBefore(dragEl, el.nextSibling);
+      else container.insertBefore(dragEl, el);
+    });
+  });
+}
 
-  const cfg = orderBank[id];
-  if(!cfg) return;
+function getCurrentOrder(container){
+  return Array.from(container.children).map(el => el.dataset.label);
+}
 
-  // shuffle
-  const items = [...cfg.items].sort(() => Math.random() - 0.5);
+function initDMAIC(){
+  const pool = document.getElementById("dmaic-pool");
+  const drop = document.getElementById("dmaic-drop");
+  const fb   = document.getElementById("dmaic-feedback");
+  const btnCheck = document.getElementById("dmaicCheck");
+  const btnReset = document.getElementById("dmaicReset");
+  if(!pool || !drop || !fb || !btnCheck || !btnReset) return;
 
-  pool.innerHTML = "";
-  drop.innerHTML = "";
+  const correct = ["Define","Measure","Analyze","Improve","Control"];
 
-  for(const label of items){
+  function makeItem(label){
     const el = document.createElement("div");
     el.className = "orderItem";
     el.textContent = label;
     el.draggable = true;
-    el.dataset.orderLabel = label;
-
+    el.dataset.label = label;
     el.addEventListener("dragstart", (e) => {
       e.dataTransfer.setData("text/plain", label);
       e.dataTransfer.effectAllowed = "move";
     });
-
-    pool.appendChild(el);
+    return el;
   }
 
-  const allowDrop = (zone) => {
+  function enableDrop(zone){
     zone.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; });
     zone.addEventListener("drop", (e) => {
       e.preventDefault();
       const label = e.dataTransfer.getData("text/plain");
       if(!label) return;
-      // Move the first matching element from either zone into the target zone
-      const el = document.querySelector(`.orderItem[data-order-label="${cssEscape(label)}"]`);
+      const el = document.querySelector(`.orderItem[data-label="${label.replace(/"/g,'\\"')}"]`);
       if(el) zone.appendChild(el);
+      // clear feedback + hints on move
+      fb.textContent = "";
+      drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
+      saveDMAIC();
     });
-  };
-  allowDrop(pool);
-  allowDrop(drop);
-
-  const fb = document.getElementById(`${id}-feedback`);
-  if(fb) fb.textContent = "";
-}
-
-function cssEscape(s){
-  // minimal escape for attribute selector
-  return String(s).replace(/"/g, '\"');
-}
-
-function resetOrder(id){
-  const pool = document.getElementById(`${id}-pool`);
-  const drop = document.getElementById(`${id}-drop`);
-  if(pool) pool.dataset.inited = "0";
-  if(drop) drop.dataset.inited = "0";
-  initOrder(id);
-}
-
-function checkOrder(id){
-  const cfg = orderBank[id];
-  const drop = document.getElementById(`${id}-drop`);
-  const fb = document.getElementById(`${id}-feedback`);
-  if(!cfg || !drop || !fb) return;
-
-  const picked = [...drop.querySelectorAll(".orderItem")].map(x => x.dataset.orderLabel || x.textContent.trim());
-  const correct = cfg.correct;
-
-  // Clear hints
-  [...drop.querySelectorAll(".orderItem")].forEach(el => { el.classList.remove("orderHintGood","orderHintBad"); });
-
-  if(picked.length !== correct.length){
-    fb.innerHTML = `Not finished yet: you placed <strong>${picked.length}</strong> of <strong>${correct.length}</strong> cards.`;
-    return;
   }
 
-  let ok = true;
-  picked.forEach((v, i) => {
-    const el = drop.querySelectorAll(".orderItem")[i];
-    if(v === correct[i]) el.classList.add("orderHintGood");
-    else { el.classList.add("orderHintBad"); ok = false; }
-  });
+  function saveDMAIC(){
+    state.activity = state.activity || {};
+    state.activity.dmaic = {
+      pool: Array.from(pool.querySelectorAll(".orderItem")).map(x => x.dataset.label),
+      drop: Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label),
+    };
+    saveState();
+  }
 
-  fb.innerHTML = ok
-    ? `✅ <strong>Correct.</strong> You placed the steps in the right order.`
-    : `❌ <strong>Not quite.</strong> Fix the red cards and try again.`;
-}
+  function loadDMAIC(){
+    const saved = state.activity && state.activity.dmaic;
+    pool.innerHTML = ""; drop.innerHTML = "";
+    const labels = (saved && Array.isArray(saved.pool) && Array.isArray(saved.drop))
+      ? {pool: saved.pool, drop: saved.drop}
+      : {pool: shuffleArray(correct), drop: []};
 
+    labels.pool.forEach(l => pool.appendChild(makeItem(l)));
+    labels.drop.forEach(l => drop.appendChild(makeItem(l)));
+    fb.textContent = "";
+  }
 
-/** ---------------------------------------------------------
- *  Retry-friendly quiz renderer:
- *  - ALWAYS clickable (no lock)
- *  - Store ONLY last selection per qid
- *  - Show feedback immediately
- *  --------------------------------------------------------- */
-function renderQuiz(slide){
-  const wrap = document.createElement("div");
-  wrap.className = "book";
+  enableDrop(pool);
+  enableDrop(drop);
 
-  const box = document.createElement("div");
-  box.className = "quizBox";
+  btnReset.onclick = () => {
+    state.activity = state.activity || {};
+    state.activity.dmaic = { pool: shuffleArray(correct), drop: [] };
+    saveState();
+    loadDMAIC();
+  };
 
-  const goal = lessonData.learningOutcomes[slide.goalIndex] || "Learning goal";
-  const t = document.createElement("div");
-  t.className = "qTitle";
-  t.textContent = `Quick Check • Goal: ${goal}`;
-  box.appendChild(t);
+  btnCheck.onclick = () => {
+    const order = Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label);
+    // clear hints
+    drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
 
-  const p = document.createElement("p");
-  p.className = "qPrompt";
-  p.textContent = slide.question;
-  box.appendChild(p);
-
-  const opts = document.createElement("div");
-  opts.className = "qOptions";
-
-  const saved = state.quiz?.[slide.qid] || null;
-
-  slide.options.forEach((txt, i) => {
-    const b = document.createElement("button");
-    b.className = "qOpt";
-    b.type = "button";
-    b.textContent = `${String.fromCharCode(65 + i)}. ${txt}`;
-
-    if(saved){
-      if(i === slide.correctIndex) b.classList.add("correct");
-      if(i === saved.selectedIndex && !saved.isCorrect) b.classList.add("wrong");
+    if(order.length !== correct.length){
+      fb.textContent = `Not finished yet: you placed ${order.length} of ${correct.length} cards.`;
+      return;
     }
 
-    b.addEventListener("click", () => {
-      const isCorrect = (i === slide.correctIndex);
-      state.quiz = state.quiz || {};
-      state.quiz[slide.qid] = {
-        selectedIndex: i,
-        isCorrect,
-        answeredAt: new Date().toISOString()
-      };
-      saveState();
-      render();
+    let ok = true;
+    order.forEach((v,i) => {
+      const el = drop.querySelectorAll(".orderItem")[i];
+      if(v === correct[i]) el.classList.add("orderHintGood");
+      else { el.classList.add("orderHintBad"); ok = false; }
     });
 
-    opts.appendChild(b);
-  });
+    fb.textContent = ok
+      ? "✅ Correct order. DMAIC keeps improvement disciplined and sustainable."
+      : "❌ Not yet. Hint: Define is first; Control is last.";
+    saveDMAIC();
+  };
 
-  box.appendChild(opts);
-
-  const fb = document.createElement("div");
-  fb.className = "qFeedback";
-  if(!saved){
-    fb.innerHTML = `<strong>Pick one option.</strong> You can try as many times as you like; only your <em>latest</em> try is stored for export.`;
-  } else {
-    fb.innerHTML = saved.isCorrect
-      ? `✅ <strong>Correct.</strong> ${slide.explanation}`
-      : `❌ <strong>Not quite.</strong> ${slide.explanation}`;
-  }
-  box.appendChild(fb);
-
-  const meta = document.createElement("div");
-  meta.className = "qMeta";
-  meta.textContent = saved
-    ? `Last try: ${new Date(saved.answeredAt).toLocaleString()}`
-    : "No attempts yet.";
-  box.appendChild(meta);
-
-  wrap.appendChild(box);
-  return wrap;
+  loadDMAIC();
 }
 
-// Navigation
-function nextSlide(){ if(state.idx < lessonData.slides.length - 1){ state.idx++; render(); } }
-function prevSlide(){ if(state.idx > 0){ state.idx--; render(); } }
+function init5S(){
+  const board = document.getElementById("s5Board");
+  const fb = document.getElementById("s5Feedback");
+  const btnCheck = document.getElementById("s5Check");
+  const btnReset = document.getElementById("s5Reset");
+  if(!board || !fb || !btnCheck || !btnReset) return;
 
-document.getElementById("btnNext").addEventListener("click", nextSlide);
-document.getElementById("btnPrev").addEventListener("click", prevSlide);
+  const correct = [
+    "Sort (Seiri): remove needless clutter and processes",
+    "Straighten (Seiton): organize for efficient access and action",
+    "Shine (Seiso): keep clean daily; look for causes of dirtiness",
+    "Standardize (Seiketsu): define steps, roles, responsibilities",
+    "Sustain (Shitsuke): maintain standards over time"
+  ];
+  const start = (state.activity.s5Order && Array.isArray(state.activity.s5Order)) ? state.activity.s5Order : shuffleArray(correct);
+  buildDraggableList(board, start);
 
-// Actions
-document.getElementById("btnReset").addEventListener("click", resetState);
-document.getElementById("btnExport").addEventListener("click", () => {
-  const exportObj = {
-    course: lessonData.courseTitle,
-    startedAt: state.startedAt,
-    currentSlide: state.idx + 1,
-    expanded: state.expanded,
-    quiz_last_tries: state.quiz,
-    learningOutcomes: lessonData.learningOutcomes
+  btnReset.onclick = () => {
+    const shuffled = shuffleArray(correct);
+    state.activity.s5Order = shuffled;
+    saveState();
+    buildDraggableList(board, shuffled);
+    fb.classList.add("hidden");
+    fb.textContent = "";
   };
-  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type:"application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "lecture2_progress.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
-  document.getElementById("statusLine").textContent = "Exported progress JSON (latest quiz tries).";
+
+  btnCheck.onclick = () => {
+    const order = getCurrentOrder(board);
+    state.activity.s5Order = order;
+    saveState();
+    const ok = order.join("|") === correct.join("|");
+    fb.classList.remove("hidden");
+    fb.textContent = ok ? "✅ Correct. 5S builds discipline, making later improvement (including automation) easier."
+                        : "❌ Not yet. Hint: Sort → Straighten → Shine → Standardize → Sustain.";
+  };
+}
+
+function render(){
+  document.getElementById("courseTitle").textContent = lessonData.courseTitle;
+  document.getElementById("courseSub").textContent = lessonData.courseSub;
+
+  const goals = document.getElementById("goals");
+  goals.innerHTML = "";
+  lessonData.learningOutcomes.forEach((g) => {
+    const li = document.createElement("li");
+    li.textContent = g;
+    goals.appendChild(li);
+  });
+
+  const total = lessonData.slides.length;
+  state.idx = Math.max(0, Math.min(state.idx, total - 1));
+  document.getElementById("slideCounter").textContent = `${state.idx + 1} / ${total}`;
+  document.getElementById("progressFill").style.width = `${((state.idx + 1)/total)*100}%`;
+
+  const sl = lessonData.slides[state.idx];
+  const slideEl = document.getElementById("slide");
+
+  if(sl.type === "quiz"){
+    slideEl.innerHTML = renderQuiz(sl);
+  } else {
+    slideEl.innerHTML = `<div class="h1">${sl.title}</div>${sl.html}`;
+  }
+
+  document.getElementById("statusLine").textContent = (sl.type === "quiz") ? "Quick Check (retry allowed)" : "Reading slide";
+
+  wireToggle("toggleVoya","panelVoya","iconVoya","voya");
+  wireToggle("toggleVoyaOutcomes","panelVoyaOutcomes","iconVoyaOutcomes","voyaOutcomes");
+  wireToggle("toggleToyota","panelToyota","iconToyota","toyota");
+  wireToggle("toggleLeanPrinciples","panelLeanPrinciples","iconLeanPrinciples","leanPrinciples");
+  wireToggle("toggleDanaher","panelDanaher","iconDanaher","danaher");
+  wireToggle("toggleSixSigmaBasics","panelSixSigmaBasics","iconSixSigmaBasics","sixSigmaBasics");
+  wireToggle("toggleDMAIC","panelDMAIC","iconDMAIC","dmaic");
+  wireToggle("toggleRoles","panelRoles","iconRoles","roles");
+  wireToggle("toggleBelts","panelBelts","iconBelts","belts");
+  wireToggle("toggleWastes","panelWastes","iconWastes","wastes");
+  wireToggle("toggleKraftHeinz","panelKraftHeinz","iconKraftHeinz","kraftHeinz");
+
+  initDMAIC();
+  init5S();
+
+  if(sl.type === "quiz") wireQuiz(sl);
+
+  document.getElementById("btnPrev").disabled = (state.idx === 0);
+  document.getElementById("btnNext").disabled = (state.idx === total - 1);
+
+  saveState();
+}
+
+document.getElementById("btnPrev").addEventListener("click", () => { state.idx = Math.max(0, state.idx - 1); render(); });
+document.getElementById("btnNext").addEventListener("click", () => { state.idx = Math.min(lessonData.slides.length - 1, state.idx + 1); render(); });
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "ArrowLeft"){ state.idx = Math.max(0, state.idx - 1); render(); }
+  else if(e.key === "ArrowRight"){ state.idx = Math.min(lessonData.slides.length - 1, state.idx + 1); render(); }
 });
 
-// Hotkeys
-document.addEventListener("keydown", (e) => {
-  if(e.key === "ArrowRight") nextSlide();
-  if(e.key === "ArrowLeft") prevSlide();
+document.getElementById("btnExport").addEventListener("click", () => {
+  const payload = { courseTitle: lessonData.courseTitle, exportedAt: new Date().toISOString(), state };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "lecture3_progress.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  if(confirm("Reset your progress for Lecture 3?")) resetState();
 });
 
 render();
