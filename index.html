@@ -146,7 +146,30 @@
       background:rgba(255,255,255,.03);
       min-height:54px;
     }
-    .orderItem{
+    
+    /* Drag-sort items (Lecture 1 proven implementation) */
+    .dragItem{
+      user-select:none;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.04);
+      margin:8px 0;
+      cursor:grab;
+      touch-action:none; /* critical for phone Chrome */
+    }
+    .dragItem.dragging{ opacity:.55; }
+
+    /* Floating clone while dragging */
+    .dragGhost{
+      position:fixed;
+      z-index:99999;
+      pointer-events:none;
+      box-shadow:0 14px 40px rgba(0,0,0,.45);
+      opacity:.95;
+      cursor:grabbing;
+    }
+.orderItem{
       padding:10px 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.14);
@@ -997,178 +1020,139 @@ function shuffleArray(arr){
 
 
 
-function buildDraggableList(a, b, feedbackEl, onSave){
-  // Pointer-based drag & drop that works on mobile Safari/Chrome.
-  // Two modes:
-  //   (1) buildDraggableList(container, itemsArray) -> single-zone reorder
-  //   (2) buildDraggableList(poolEl, dropEl, feedbackEl, onSave) -> two zones with move + reorder
-
-  // ---------- Helpers ----------
-  function makeItem(label){
+function buildDraggableList(container, items){
+  container.innerHTML = "";
+  for(const t of items){
     const el = document.createElement("div");
-    el.className = "orderItem";
-    el.dataset.label = label;
-    el.textContent = label;
-    return el;
+    el.className = "dragItem";
+    el.textContent = t;
+    container.appendChild(el);
   }
-
-  function enablePointerDnD(zones){
-    zones.forEach(z => { z.style.touchAction = "none"; });
-
-    // Avoid double-binding if slide re-renders
-    const boundKey = "dndBound";
-    if(zones.every(z => z.dataset[boundKey] === "1")) return;
-    zones.forEach(z => z.dataset[boundKey] = "1");
-
-    let original = null;
-    let ghost = null;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    function allItems(zone){ return [...zone.querySelectorAll(".orderItem")]; }
-
-    function makeGhost(fromEl){
-      const r = fromEl.getBoundingClientRect();
-      ghost = fromEl.cloneNode(true);
-      ghost.classList.add("dragGhost");
-      ghost.style.left = r.left + "px";
-      ghost.style.top  = r.top  + "px";
-      ghost.style.width = r.width + "px";
-      document.body.appendChild(ghost);
-    }
-
-    function zoneFromPoint(x, y){
-      const els = document.elementsFromPoint(x, y);
-      for(const el of els){
-        const z = el.closest(".orderPool, .orderDrop, .orderBoard");
-        if(z && zones.includes(z)) return z;
-      }
-      return null;
-    }
-
-    function insertAtBestSpot(zone, y){
-      const items = allItems(zone).filter(it => it !== original);
-      if(items.length === 0){
-        zone.appendChild(original);
-        return;
-      }
-
-      let bestEl = null;
-      let bestMid = 0;
-      let bestDist = Infinity;
-
-      for(const it of items){
-        const r = it.getBoundingClientRect();
-        const mid = r.top + r.height / 2;
-        const d = Math.abs(mid - y);
-        if(d < bestDist){
-          bestDist = d;
-          bestEl = it;
-          bestMid = mid;
-        }
-      }
-
-      if(!bestEl){
-        zone.appendChild(original);
-        return;
-      }
-
-      const insertAfter = y > bestMid;
-      if(insertAfter){
-        if(bestEl.nextSibling !== original){
-          zone.insertBefore(original, bestEl.nextSibling);
-        }
-      } else {
-        if(bestEl !== original.nextSibling){
-          zone.insertBefore(original, bestEl);
-        }
-      }
-    }
-
-    function moveGhost(x, y){
-      if(!ghost) return;
-      ghost.style.left = (x - offsetX) + "px";
-      ghost.style.top  = (y - offsetY) + "px";
-
-      const z = zoneFromPoint(x, y);
-      if(z) insertAtBestSpot(z, y);
-    }
-
-    function cleanup(){
-      if(!original) return;
-      original.style.visibility = "";
-      original.classList.remove("dragging");
-      if(ghost){ ghost.remove(); ghost = null; }
-      original = null;
-
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerUp);
-
-      onSave && onSave(); // persist after each drag
-    }
-
-    function onPointerDown(e){
-      const target = e.target.closest(".orderItem");
-      if(!target) return;
-      e.preventDefault();
-
-      original = target;
-
-      const r = original.getBoundingClientRect();
-      offsetX = e.clientX - r.left;
-      offsetY = e.clientY - r.top;
-
-      makeGhost(original);
-
-      original.classList.add("dragging");
-      original.style.visibility = "hidden";
-
-      moveGhost(e.clientX, e.clientY);
-
-      window.addEventListener("pointermove", onPointerMove, { passive:false });
-      window.addEventListener("pointerup", onPointerUp, { passive:false });
-      window.addEventListener("pointercancel", onPointerUp, { passive:false });
-    }
-
-    function onPointerMove(e){
-      if(!original || !ghost) return;
-      e.preventDefault();
-      moveGhost(e.clientX, e.clientY);
-    }
-
-    function onPointerUp(e){
-      if(!original) return;
-      e.preventDefault();
-      cleanup();
-    }
-
-    zones.forEach(z => z.addEventListener("pointerdown", onPointerDown));
-  }
-
-  // ---------- Mode 1: single-zone reorder ----------
-  if(Array.isArray(b)){
-    const container = a;
-    const items = b;
-
-    container.innerHTML = "";
-    items.forEach(t => container.appendChild(makeItem(t)));
-
-    enablePointerDnD([container]);
-    return;
-  }
-
-  // ---------- Mode 2: pool + drop ----------
-  const pool = a;
-  const drop = b;
-
-  enablePointerDnD([pool, drop]);
+  enableDragSort(container);
 }
 
 
 function getCurrentOrder(container){
-  return Array.from(container.children).map(el => el.dataset.label);
+  return [...container.querySelectorAll(".dragItem")].map(el => el.textContent.trim());
 }
+
+/** ---------------------------------------------------------
+ *  Drag-sort (Pointer Events) — robust single-instance manager
+ *  Same behavior as our Lecture 1 implementation:
+ *  - keep original in DOM (hidden)
+ *  - drag a floating ghost clone
+ *  - reorder based on closest mid-point
+ *  --------------------------------------------------------- */
+(function(){
+  if (window.__DragSortManager) return;
+
+  const M = {
+    active: null,   // { container, original, ghost, offsetY }
+    bound: false,
+  };
+
+  function listItems(container){ return [...container.querySelectorAll(".dragItem")]; }
+
+  function cleanup(){
+    const a = M.active;
+    if(!a) return;
+    a.original.style.visibility = "";
+    if(a.ghost){ a.ghost.remove(); }
+    M.active = null;
+  }
+
+  function moveGhost(clientY){
+    const a = M.active;
+    if(!a || !a.ghost) return;
+
+    a.ghost.style.top = (clientY - a.offsetY) + "px";
+
+    const ghostRect = a.ghost.getBoundingClientRect();
+    const ghostMidY = ghostRect.top + ghostRect.height / 2;
+
+    let best = null;
+    let bestDist = Infinity;
+
+    for(const el of listItems(a.container)){
+      if(el === a.original) continue;
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      const d = Math.abs(mid - ghostMidY);
+      if(d < bestDist){
+        bestDist = d;
+        best = { el, mid };
+      }
+    }
+
+    if(best){
+      const insertAfter = ghostMidY > best.mid;
+      if(insertAfter){
+        if(best.el.nextSibling !== a.original){
+          a.container.insertBefore(a.original, best.el.nextSibling);
+        }
+      } else {
+        if(best.el !== a.original.nextSibling){
+          a.container.insertBefore(a.original, best.el);
+        }
+      }
+    }
+  }
+
+  function onPointerMove(e){
+    if(!M.active) return;
+    e.preventDefault();
+    moveGhost(e.clientY);
+  }
+
+  function onPointerUp(e){
+    if(!M.active) return;
+    e.preventDefault();
+    cleanup();
+  }
+
+  M.bindGlobal = function(){
+    if(M.bound) return;
+    M.bound = true;
+    window.addEventListener("pointermove", onPointerMove, { passive:false });
+    window.addEventListener("pointerup", onPointerUp, { passive:false });
+    window.addEventListener("pointercancel", onPointerUp, { passive:false });
+  };
+
+  window.__DragSortManager = M;
+
+  window.enableDragSort = function enableDragSort(container){
+    if (!container || container.dataset.dragSortBound === "1") return;
+    container.dataset.dragSortBound = "1";
+
+    container.style.touchAction = "none";
+    M.bindGlobal();
+
+    container.addEventListener("pointerdown", (e) => {
+      const target = e.target.closest(".dragItem");
+      if(!target) return;
+
+      e.preventDefault();
+
+      const original = target;
+      const rect = original.getBoundingClientRect();
+      const offsetY = e.clientY - rect.top;
+
+      const ghost = original.cloneNode(true);
+      ghost.classList.add("dragGhost");
+      ghost.style.left = rect.left + "px";
+      ghost.style.top  = rect.top + "px";
+      ghost.style.width = rect.width + "px";
+      document.body.appendChild(ghost);
+
+      original.style.visibility = "hidden";
+
+      M.active = { container, original, ghost, offsetY };
+      moveGhost(e.clientY);
+    });
+  };
+})();
+
+
 
 function initDMAIC(){
   const pool = document.getElementById("dmaic-pool");
