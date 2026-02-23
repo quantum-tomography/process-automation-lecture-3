@@ -136,34 +136,6 @@
       line-height:1.6;
     }
     .qMeta{ margin-top:10px; color:var(--muted); font-size:13px; }
-  
-    /* ---- Ordering activities (DMAIC, 5S) ---- */
-    .orderPool, .orderDrop{
-      display:flex; flex-wrap:wrap; gap:10px;
-      padding:10px;
-      border-radius:14px;
-      border:1px dashed rgba(255,255,255,.18);
-      background:rgba(255,255,255,.03);
-      min-height:54px;
-    }
-    .orderItem{
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.05);
-      cursor:grab;
-      user-select:none;
-      font-weight:700;
-      color:var(--text);
-    }
-    .orderItem:active{ cursor:grabbing; }
-    .orderDrop .orderItem{
-      border-color:rgba(77,163,255,.30);
-      background:rgba(77,163,255,.08);
-    }
-    .orderHintGood{ border-color:rgba(61,220,151,.45) !important; background:rgba(61,220,151,.10) !important; }
-    .orderHintBad{ border-color:rgba(255,92,122,.45) !important; background:rgba(255,92,122,.10) !important; }
-
   </style>
 </head>
 
@@ -553,28 +525,18 @@ const lessonData = {
 
           <hr>
 
-          
           <div class="panel" id="dmaicActivity">
             <div class="h2" style="margin-top:0">Activity: Put DMAIC in order</div>
             <p class="note" style="margin-top:0">
-              Drag the cards into the correct order. Move them from <strong>Cards</strong> into <strong>Your order</strong>, then press <strong>Check</strong>.
+              Drag the cards into the correct order. Then press <strong>Check</strong>.
             </p>
-
-            <div class="h2" style="margin:14px 0 8px">Cards</div>
-            <div id="dmaic-pool" class="orderPool"></div>
-
-            <div class="h2" style="margin:14px 0 8px">Your order</div>
-            <div id="dmaic-drop" class="orderDrop"></div>
-
+            <div id="dmaicBoard" style="display:grid; gap:10px;"></div>
             <div class="btns" style="margin-top:12px">
-              <button class="primary" id="dmaicCheck">Check</button>
-              <button id="dmaicReset">Reset</button>
+              <button class="primary" id="dmaicCheck">Check order</button>
+              <button id="dmaicReset">Shuffle</button>
             </div>
-            <div id="dmaic-feedback" class="note" style="margin-top:12px"></div>
-            <div class="qMeta">Tip: “Control” is last because it ensures the improvements stay in place.</div>
-          </div>
-
-          <div class="qMeta">Tip: “Control” is last because it ensures the improvement stays.</div>
+            <div class="qFeedback hidden" id="dmaicFeedback"></div>
+            <div class="qMeta">Tip: “Control” is last because it ensures the improvement stays.</div>
           </div>
         </div>
       `
@@ -1030,98 +992,34 @@ function getCurrentOrder(container){
 }
 
 function initDMAIC(){
-  const pool = document.getElementById("dmaic-pool");
-  const drop = document.getElementById("dmaic-drop");
-  const fb   = document.getElementById("dmaic-feedback");
+  const board = document.getElementById("dmaicBoard");
+  const fb = document.getElementById("dmaicFeedback");
   const btnCheck = document.getElementById("dmaicCheck");
   const btnReset = document.getElementById("dmaicReset");
-  if(!pool || !drop || !fb || !btnCheck || !btnReset) return;
+  if(!board || !fb || !btnCheck || !btnReset) return;
 
   const correct = ["Define","Measure","Analyze","Improve","Control"];
-
-  function makeItem(label){
-    const el = document.createElement("div");
-    el.className = "orderItem";
-    el.textContent = label;
-    el.draggable = true;
-    el.dataset.label = label;
-    el.addEventListener("dragstart", (e) => {
-      e.dataTransfer.setData("text/plain", label);
-      e.dataTransfer.effectAllowed = "move";
-    });
-    return el;
-  }
-
-  function enableDrop(zone){
-    zone.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; });
-    zone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      const label = e.dataTransfer.getData("text/plain");
-      if(!label) return;
-      const el = document.querySelector(`.orderItem[data-label="${label.replace(/"/g,'\\"')}"]`);
-      if(el) zone.appendChild(el);
-      // clear feedback + hints on move
-      fb.textContent = "";
-      drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
-      saveDMAIC();
-    });
-  }
-
-  function saveDMAIC(){
-    state.activity = state.activity || {};
-    state.activity.dmaic = {
-      pool: Array.from(pool.querySelectorAll(".orderItem")).map(x => x.dataset.label),
-      drop: Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label),
-    };
-    saveState();
-  }
-
-  function loadDMAIC(){
-    const saved = state.activity && state.activity.dmaic;
-    pool.innerHTML = ""; drop.innerHTML = "";
-    const labels = (saved && Array.isArray(saved.pool) && Array.isArray(saved.drop))
-      ? {pool: saved.pool, drop: saved.drop}
-      : {pool: shuffleArray(correct), drop: []};
-
-    labels.pool.forEach(l => pool.appendChild(makeItem(l)));
-    labels.drop.forEach(l => drop.appendChild(makeItem(l)));
-    fb.textContent = "";
-  }
-
-  enableDrop(pool);
-  enableDrop(drop);
+  const start = (state.activity.dmaicOrder && Array.isArray(state.activity.dmaicOrder)) ? state.activity.dmaicOrder : shuffleArray(correct);
+  buildDraggableList(board, start);
 
   btnReset.onclick = () => {
-    state.activity = state.activity || {};
-    state.activity.dmaic = { pool: shuffleArray(correct), drop: [] };
+    const shuffled = shuffleArray(correct);
+    state.activity.dmaicOrder = shuffled;
     saveState();
-    loadDMAIC();
+    buildDraggableList(board, shuffled);
+    fb.classList.add("hidden");
+    fb.textContent = "";
   };
 
   btnCheck.onclick = () => {
-    const order = Array.from(drop.querySelectorAll(".orderItem")).map(x => x.dataset.label);
-    // clear hints
-    drop.querySelectorAll(".orderItem").forEach(x => x.classList.remove("orderHintGood","orderHintBad"));
-
-    if(order.length !== correct.length){
-      fb.textContent = `Not finished yet: you placed ${order.length} of ${correct.length} cards.`;
-      return;
-    }
-
-    let ok = true;
-    order.forEach((v,i) => {
-      const el = drop.querySelectorAll(".orderItem")[i];
-      if(v === correct[i]) el.classList.add("orderHintGood");
-      else { el.classList.add("orderHintBad"); ok = false; }
-    });
-
-    fb.textContent = ok
-      ? "✅ Correct order. DMAIC keeps improvement disciplined and sustainable."
-      : "❌ Not yet. Hint: Define is first; Control is last.";
-    saveDMAIC();
+    const order = getCurrentOrder(board);
+    state.activity.dmaicOrder = order;
+    saveState();
+    const ok = order.join("|") === correct.join("|");
+    fb.classList.remove("hidden");
+    fb.textContent = ok ? "✅ Correct order. DMAIC keeps improvement disciplined and sustainable."
+                        : "❌ Not yet. Hint: Define is first; Control is last.";
   };
-
-  loadDMAIC();
 }
 
 function init5S(){
